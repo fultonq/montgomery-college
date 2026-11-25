@@ -1,0 +1,24 @@
+name: 'MC College'
+description: 'Montgomery Community College theme, generated from MC College.'
+core_version_requirement: ^11
+engine: twig
+type: theme
+'base theme': false
+auto_switch_components: true
+screenshot: screenshot.png
+'alt text': 'Screenshot of MC College, Varbase front-end theme.'
+regions:
+  content: Content
+  header: Header
+  footer: Footer
+libraries:
+  - mc_college/mc-college
+  - mc_college/framework
+ckeditor_stylesheets: false
+ckeditor5-stylesheets:
+  - css/base/ckeditor5.bootstrap.base.css
+enforce_prop_schemas: false
+version: 1.0.0
+project: mc_college
+datestamp: 1795343684
+generator: 'mc_college:1.0.10'

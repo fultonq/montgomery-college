@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks for MC College Core.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Install academic policy settings and grant academic record permissions.
+ */
+function mc_college_core_update_11001(): string {
+  $config = \Drupal::configFactory()->getEditable('mc_college_core.settings');
+  if ($config->isNew()) {
+    $config->setData([
+      'probation_gpa' => 2.0,
+      'deans_list_gpa' => 3.5,
+      'deans_list_min_credits' => 6,
+      'non_matriculated_credit_cap' => 11,
+      'matriculation_credit_threshold' => 12,
+      'enforce_matriculation' => TRUE,
+    ])->save();
+  }
+  $grants = [
+    'student' => ['view own academic record'],
+    'registrar' => ['view own academic record', 'view student academic records', 'view college performance analytics'],
+  ];
+  foreach ($grants as $role => $permissions) {
+    if (\Drupal::entityTypeManager()->getStorage('user_role')->load($role)) {
+      user_role_grant_permissions($role, $permissions);
+    }
+  }
+  return 'Installed academic policy settings and granted academic record permissions.';
+}
+
+/**
+ * Show Academic Year on semesters; grant self-service schedule changes.
+ *
+ * Run after re-applying the mc_college_structure recipe, which creates the
+ * field_academic_year, field_enrollment_status, and field_matriculation_date
+ * fields.
+ */
+function mc_college_core_update_11002(): string {
+  $repository = \Drupal::service('entity_display.repository');
+  $done = [];
+  if (\Drupal\field\Entity\FieldConfig::loadByName('node', 'semester', 'field_academic_year')) {
+    $repository->getFormDisplay('node', 'semester')
+      ->setComponent('field_academic_year', ['type' => 'options_select', 'weight' => -4, 'region' => 'content'])
+      ->save();
+    $repository->getViewDisplay('node', 'semester')
+      ->setComponent('field_academic_year', ['type' => 'entity_reference_label', 'label' => 'above', 'settings' => ['link' => FALSE], 'weight' => -4, 'region' => 'content'])
+      ->save();
+    $done[] = 'semester displays';
+  }
+  if (\Drupal::entityTypeManager()->getStorage('user_role')->load('student')) {
+    user_role_grant_permissions('student', ['manage own course registrations']);
+    $done[] = 'student permissions';
+  }
+  return 'Updated: ' . ($done ? implode(', ', $done) : 'nothing (apply the recipe first)') . '.';
+}

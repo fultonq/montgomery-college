@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+  logger.channel.mc_college_billing:
+    parent: logger.channel_base
+    arguments: ['mc_college_billing']
+  mc_college_billing.tuition:
+    class: Drupal\mc_college_billing\TuitionBilling
+    arguments:
+      $logger: '@logger.channel.mc_college_billing'
+  Drupal\mc_college_billing\TuitionBilling: '@mc_college_billing.tuition'

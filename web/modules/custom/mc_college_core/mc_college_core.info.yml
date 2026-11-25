@@ -1,0 +1,11 @@
+name: 'MC College Core'
+type: module
+description: 'Montgomery Community College business logic: GPA, transcripts, performance analytics, enrollment policy, grading access, and student data privacy.'
+package: 'MC College'
+core_version_requirement: ^11
+configure: mc_college_core.settings
+dependencies:
+  - computed_field:computed_field
+  - drupal:node
+  - drupal:user
+  - registration:registration

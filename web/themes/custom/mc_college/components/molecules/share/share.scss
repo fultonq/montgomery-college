@@ -1,0 +1,313 @@
+// @file
+// MC College — Share component (override of `webshare:share`).
+//
+// All visual values flow through `--webshare-*` tokens that resolve to
+// Bootstrap 5 SCSS variables (`$spacer`, `$primary`, `$border-radius-pill`,
+// `$font-weight-bold`, …) or Bootstrap CSS custom properties (`--bs-*`), so
+// the component inherits the active theme automatically.
+//
+// LinkedIn note: the `mc_college_social` SVG ships a coloured rounded
+// rect + white "in" glyph. The design shows only the "in" glyph in
+// brand-primary on the secondary surface, so the rect is hidden and
+// the path is recoloured to the Bootstrap primary token.
+
+@import "../../defaults";
+
+// Shared interactive surface for every share trigger.
+@mixin webshare-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--webshare-button-size);
+  height: var(--webshare-button-size);
+  margin: 0;
+  padding: 0;
+  transition: var(--webshare-transition);
+  text-decoration: none;
+  color: var(--webshare-button-color);
+  border: 0;
+  border-radius: var(--webshare-button-radius);
+  background: var(--webshare-button-bg);
+  box-shadow: var(--webshare-button-shadow);
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    background: var(--webshare-button-bg-hover);
+  }
+
+  &:active {
+    background: var(--webshare-button-bg-active);
+  }
+
+  &:focus-visible {
+    outline: var(--webshare-focus-ring);
+    outline-offset: var(--webshare-focus-offset);
+  }
+}
+
+.webshare {
+  // ── Sizing tokens (all derived from Bootstrap's $spacer = 1rem) ──
+  --webshare-button-size: #{$spacer * 2.5};
+  --webshare-icon-size: #{$spacer};           // the glyph sits well inside the button
+  --webshare-gap: #{$spacer * 0.5};
+  --webshare-heading-gap: #{$spacer};
+
+  // ── Colour + surface tokens (Bootstrap CSS variables) ───────────
+  // The approved design's subtle button surface is Bootstrap's
+  // secondary-bg-subtle, not the stronger secondary-bg — keep the two
+  // distinct so a re-skinned secondary palette still tracks correctly.
+  --webshare-button-bg: var(--bs-secondary-bg-subtle);
+  --webshare-button-bg-hover: var(--bs-primary-bg-subtle);
+  --webshare-button-bg-active: var(--bs-primary-border-subtle);
+  --webshare-button-color: var(--bs-body-color);
+  --webshare-button-radius: #{$border-radius-pill};
+  --webshare-button-shadow: none;
+
+  // ── Heading typography (Bootstrap font variables) ───────────────
+  --webshare-heading-color: var(--bs-body-color);
+  --webshare-heading-font: var(--bs-body-font-family);
+  --webshare-heading-font-size: 1.125rem;
+  --webshare-heading-font-weight: #{$font-weight-bold};
+  --webshare-heading-line-height: #{$line-height-base};
+
+  // ── Focus + interaction (Bootstrap focus ring + transition) ─────
+  --webshare-focus-ring: #{$focus-ring-width} solid var(--bs-focus-ring-color);
+  --webshare-focus-offset: #{$spacer * 0.125};
+  --webshare-transition: #{$transition-base};
+
+  // ── Rail-end placement ──────────────────────────────────────────
+  --webshare-rail-top: #{$spacer * 6};
+  --webshare-rail-gap: var(--bs-gutter-x, #{$grid-gutter-width});
+
+  // ── Clipboard feedback flash (Bootstrap state colours) ──────────
+  --webshare-copied-bg: var(--bs-success);
+  --webshare-copied-color: var(--bs-white);
+
+  // ── Glyph colour ──────────────────────────────────────────────
+  // Bound to --bs-dark (this theme's brand navy), not --bs-primary —
+  // this theme never overrides Bootstrap's default $primary, so
+  // --bs-primary stays stock Bootstrap blue rather than the brand color.
+  --webshare-icon-color: var(--bs-dark);
+
+  box-sizing: border-box;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &__heading {
+    margin: 0 0 var(--webshare-heading-gap);
+    padding: 0;
+    color: var(--webshare-heading-color);
+    font-family: var(--webshare-heading-font);
+    font-size: var(--webshare-heading-font-size);
+    font-weight: var(--webshare-heading-font-weight);
+    line-height: var(--webshare-heading-line-height);
+  }
+
+  // Horizontal: heading sits inline with the icon list, not stacked above it.
+  &--horizontal {
+    display: flex;
+    align-items: center;
+    gap: var(--webshare-heading-gap);
+  }
+
+  &--horizontal &__heading {
+    margin: 0;
+  }
+
+  &__list {
+    display: flex;
+    gap: var(--webshare-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &--horizontal &__list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &--vertical &__list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &--align-start &__list {
+    justify-content: flex-start;
+  }
+
+  &--align-end &__list {
+    justify-content: flex-end;
+  }
+
+  &--align-end#{&}--vertical &__list {
+    align-items: flex-end;
+  }
+
+  // Align the heading with whichever edge the button column sits on:
+  // centred above the button stack by default, or aligned to the
+  // inline-end of the container for the rail-end variant.
+  &--align-end &__heading {
+    text-align: end;
+  }
+
+  &--align-start &__heading {
+    text-align: start;
+  }
+
+  &--vertical:not(#{&}--align-end):not(#{&}--align-start) &__heading {
+    text-align: center;
+  }
+
+  &__item {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 0;
+
+    &::before,
+    &::marker {
+      content: none;
+    }
+
+    > a,
+    > button,
+    > span {
+      @include webshare-button;
+    }
+
+    img,
+    svg {
+      display: block;
+      width: var(--webshare-icon-size);
+      max-width: none;
+      height: var(--webshare-icon-size);
+      max-height: none;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .bi {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--webshare-icon-size);
+      height: var(--webshare-icon-size);
+      font-size: var(--webshare-icon-size);
+      line-height: 1;
+      color: var(--webshare-button-color);
+    }
+  }
+
+  // ── Glyph colouring (every platform) ─────────────────────────────
+  // All icon glyphs are bound to --webshare-icon-color (--bs-dark). The
+  // `mc_college_social` SVG pack bakes per-brand colours into its shapes,
+  // so override generically for ALL platforms rather than per-platform —
+  // any platform an admin enables in webshare.settings inherits the
+  // themed glyph colour automatically.
+  //
+  // Two SVG shapes appear in the pack:
+  //   • a coloured rounded-rect background (e.g. LinkedIn) → hidden
+  //   • the glyph path(s) → recoloured to --webshare-icon-color
+  &__item {
+    // Font-icon (`<i class="bi">`) fallback rendering.
+    .bi {
+      color: var(--webshare-icon-color);
+    }
+
+    // SVG pack rendering.
+    svg {
+      fill: var(--webshare-icon-color);
+
+      rect {
+        fill: transparent;
+      }
+
+      path {
+        fill: var(--webshare-icon-color);
+      }
+    }
+  }
+
+  &__item--copy {
+    > a,
+    > button {
+      cursor: pointer;
+    }
+  }
+
+  &__native-button {
+    @include webshare-button;
+
+    font: inherit;
+    line-height: 0;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+
+    &.webshare--copied {
+      background: var(--webshare-copied-bg);
+      color: var(--webshare-copied-color);
+    }
+
+    // Native share button glyph uses the same token as the platform icons.
+    color: var(--webshare-icon-color);
+
+    .bi {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--webshare-icon-size);
+      height: var(--webshare-icon-size);
+      font-size: var(--webshare-icon-size);
+      line-height: 1;
+      color: var(--webshare-icon-color);
+    }
+
+    svg {
+      fill: var(--webshare-icon-color);
+
+      rect { fill: transparent; }
+
+      path { fill: var(--webshare-icon-color); }
+    }
+  }
+
+  &__native-icon {
+    display: block;
+    width: var(--webshare-icon-size);
+    height: var(--webshare-icon-size);
+    color: var(--webshare-icon-color);
+  }
+}
+
+// ── Rail-end placement (sticky right rail on ≥ lg viewports) ─────
+@include media-breakpoint-up(lg) {
+  .webshare--rail-end {
+    position: sticky;
+    top: var(--webshare-rail-top);
+    float: inline-end;
+    margin-inline-start: var(--webshare-rail-gap);
+    margin-block-end: $spacer;
+  }
+}
+
+// ── Mobile visibility helpers ────────────────────────────────────
+@include media-breakpoint-down(md) {
+  .webshare.webshare--hide-mobile {
+    display: none;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .webshare.webshare--mobile-only {
+    display: none;
+  }
+}

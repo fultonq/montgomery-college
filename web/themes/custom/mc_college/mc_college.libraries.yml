@@ -1,0 +1,275 @@
+framework:
+  dependencies:
+    - core/components.mc_college--root
+    - mc_college/bootstrap-styles
+    - mc_college/bootstrap-scripts
+    - mc_college/global-styles
+    - mc_college/global-scripts
+    - mc_college/bootstrap-icons
+    # - mc_college/fontawesome  ## Uncomment to use the fontawesome library.
+
+# Bootstrap 5 global styles library.
+bootstrap-styles:
+  css:
+    base:
+      css/base/bootstrap.base.css: {}
+
+# Bootstrap 5 global scripts library.
+bootstrap-scripts:
+  dependencies:
+    - mc_college/bs-base-component-script
+    # - mc_college/bs-alert-script
+    # - mc_college/bs-button-script
+    - mc_college/bs-carousel-script
+    # Needed for Bootstrap Accordion (Accordion is powered by Collapse).
+    - mc_college/bs-collapse-script
+    # - mc_college/bs-dropdown-script
+    - mc_college/bs-modal-script
+    - mc_college/bs-offcanvas-script
+    - mc_college/bs-popover-script
+    - mc_college/bs-scrollspy-script
+    - mc_college/bs-tab-script
+    - mc_college/bs-toast-script
+    - mc_college/bs-tooltip-script
+    - content_moderation/content_moderation
+
+# Popperjs core.
+popper-script:
+  js:
+    js/popperjs/popper.js: {}
+
+# Bootstrap Base component script.
+bs-base-component-script:
+  dependencies:
+    - core/drupalSettings
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery
+    - core/once
+    - mc_college/popper-script
+  js:
+    js/bootstrap/util/index.js: {}
+    js/bootstrap/dom/data.js: {}
+    js/bootstrap/dom/event-handler.js: {}
+    js/bootstrap/dom/manipulator.js: {}
+    js/bootstrap/dom/selector-engine.js: {}
+    js/bootstrap/util/config.js: {}
+    js/bootstrap/util/component-functions.js: {}
+    js/bootstrap/util/backdrop.js: {}
+    js/bootstrap/util/focustrap.js: {}
+    js/bootstrap/util/scrollbar.js: {}
+    js/bootstrap/util/swipe.js: {}
+    js/bootstrap/util/sanitizer.js: {}
+    js/bootstrap/util/template-factory.js: {}
+    js/bootstrap/base-component.js: {}
+
+# Bootstrap alert script.
+bs-alert-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/alert.js: {}
+
+# Bootstrap button script.
+bs-button-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/button.js: {}
+
+# Bootstrap carousel script.
+bs-carousel-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/carousel.js: {}
+
+# Bootstrap collapse script.
+bs-collapse-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/collapse.js: {}
+
+# Bootstrap dropdown script.
+bs-dropdown-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/dropdown.js: {}
+
+# Bootstrap modal script.
+bs-modal-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/modal.js: {}
+
+# Bootstrap offcanvas script.
+bs-offcanvas-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/offcanvas.js: {}
+
+# Bootstrap popover script.
+bs-popover-script:
+  dependencies:
+    - mc_college/bs-tooltip-script
+  js:
+    js/bootstrap/popover.js: {}
+
+# Bootstrap scrollspy script.
+bs-scrollspy-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/scrollspy.js: {}
+
+# Bootstrap tab script.
+bs-tab-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/tab.js: {}
+
+# Bootstrap toast script.
+bs-toast-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/toast.js: {}
+
+# Bootstrap tooltip script.
+bs-tooltip-script:
+  dependencies:
+    - mc_college/bs-base-component-script
+  js:
+    js/bootstrap/tooltip.js: {}
+
+# MC College global styles library.
+global-styles:
+  css:
+    base:
+      css/base/mc_college.base.css: {}
+    layout:
+      css/layout/edge2edge.layout.css: {}
+      css/layout/equal-height.layout.css: {}
+      css/layout/print.layout.css: { media: print }
+    theme:
+      fonts/sora/css/sora.css: {}
+      fonts/dm-mono/css/dm-mono.css: {}
+
+# MC College global scripts library.
+global-scripts:
+  js:
+    js/scripts.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery
+    - core/once
+
+# Sticky header styles + behavior. Attached from mc_college.theme only when
+# the "Sticky header" theme setting is enabled, so it never loads otherwise.
+sticky-header:
+  css:
+    theme:
+      css/theme/sticky-header.theme.css: {}
+  js:
+    js/sticky-header.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+framework-rtl:
+  dependencies:
+    - mc_college/bootstrap-styles-rtl
+    - mc_college/bootstrap-scripts
+    - mc_college/global-styles-rtl
+    - mc_college/global-scripts
+    - mc_college/bootstrap-icons
+    # - mc_college/fontawesome ## Uncomment to use the fontawesome library.
+
+# Bootstrap 5 global RTL styles library.
+bootstrap-styles-rtl:
+  css:
+    base:
+      css/base/bootstrap-rtl.base.css: {}
+
+# MC College global RTL styles library.
+global-styles-rtl:
+  css:
+    base:
+      css/base/mc_college-rtl.base.css: {}
+    theme:
+      fonts/droid/arabic/kufi/css/droidarabickufi.css: {}
+
+# MC College content moderation status theme.
+content_moderation:
+  css:
+    theme:
+      css/theme/content-moderation.theme.css: {}
+
+# Font Awesome free icons.
+fontawesome:
+  css:
+    theme:
+      fonts/fontawesome-free/css/all.min.css: { minified: true }
+
+# Bootstrap free icons.
+bootstrap-icons:
+  css:
+    theme:
+      fonts/bootstrap-icons/font/bootstrap-icons.min.css: { minified: true }
+
+# Behaviors for local video scripts in the heroslider component.
+local-video-slider:
+  js:
+    components/organisms/heroslider/js/video.heroslider.local.js: {}
+
+# Behaviors for Youtube video scripts in the heroslider component.
+youtube-video-slider:
+  js:
+    components/organisms/heroslider/js/video.heroslider.youtube.js: { weight: -1 }
+
+# Behaviors for vimeo embeded videos scripts in the heroslider component.
+vimeo-video-slider:
+  js:
+    components/organisms/heroslider/js/video.heroslider.vimeo.js: { weight: -1 }
+
+# Oembed frame for Youtube video behaviors in the heroslider component.
+oembed-frame-video-youtube:
+  js:
+    components/organisms/heroslider/js/oembed-frame.heroslider.youtube.js: {}
+
+# Oembed frame for Vimeo video behaviors in the heroslider component.
+oembed-frame-video-vimeo:
+  js:
+    components/organisms/heroslider/js/oembed-frame.heroslider.vimeo.js: {}
+
+# Ckeditor 5 styles.
+ckeditor5-root:
+  dependencies:
+    - core/components.mc_college--root
+
+# Ckeditor 5 styles.
+ckeditor5-styles:
+  dependencies:
+    - core/components.mc_college--alert
+    - core/components.mc_college--callout
+
+# Accordion behavior script (ensures Bootstrap Collapse works inside Drupal Canvas/SDC renders).
+accordion-scripts:
+  dependencies:
+    - mc_college/bs-collapse-script
+  js:
+    components/molecules/accordion-container/accordion-container.js: {}
+
+
+mc-college:
+  version: 1.x
+  css:
+    theme:
+      css/mc-college.css: {}

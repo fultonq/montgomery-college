@@ -1,0 +1,19 @@
+@import "../../defaults";   // Global component defaults.
+
+// Canvas loads its brand kit :root colors before the theme CSS. The Bootstrap
+// root values sit in a cascade layer, and a layer loses to the brand kit (which
+// is in none) whatever the load order, so these values stay the fallback.
+// The Root CSS3 variables for Bootstrap 5.
+@layer mc_college-root {
+  @import "../../../node_modules/bootstrap/scss/root";
+}
+
+// Custom accent CSS vars — Bootstrap only generates these for its built-in
+// theme colors; accent is a mc_college custom addition so we define them manually.
+@layer mc_college-root {
+  :root,
+  [data-bs-theme="light"] {
+    --bs-accent-bg-subtle:     #{$accent-bg-subtle};
+    --bs-accent-text-emphasis: #{$accent-text-emphasis};
+  }
+}

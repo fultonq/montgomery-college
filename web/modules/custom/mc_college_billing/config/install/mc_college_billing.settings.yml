@@ -1,0 +1,18 @@
+# PLACEHOLDER RATES - replace with the college's published tuition schedule
+# at /admin/commerce/config/tuition.
+currency: USD
+tuition_per_credit:
+  in_district: '130.00'
+  out_of_district: '270.00'
+  out_of_state: '370.00'
+technology_fee_per_credit: '15.00'
+term_fees:
+  registration:
+    label: 'Registration fee'
+    amount: '25.00'
+  student_activity:
+    label: 'Student activity fee'
+    amount: '40.00'
+payment_instructions: "Pay in person at the Bursar's Office (cash, check, or card), or mail a check payable to Montgomery Community College with your Student ID. Online payment is not yet available."
+financial_hold_enabled: false
+financial_hold_threshold: '0.00'

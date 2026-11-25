@@ -1,0 +1,190 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Icon Toggle
+status: stable
+description: "A single icon button for the header/navbar (or anywhere else). Clicking it overlays a popover panel holding whatever is dropped into its 'content' slot — e.g. the 'Exposed form: search-page' block for a search toggle — without hiding the surrounding navigation; clicking again (or Escape / outside click) closes it."
+group: Navigation
+props:
+  type: object
+  properties:
+    icon:
+      type: string
+      title: Icon
+      description: Bootstrap Icon name shown in the closed state (without the "bi-" prefix). Swaps to a close (X) icon while the panel is open.
+      x-canvas-icon:
+        - bootstrap_icons
+      enum:
+        - search
+        - facebook
+        - twitter-x
+        - instagram
+        - linkedin
+        - x
+        - plus
+        - exclamation
+        - check
+        - dash
+        - question
+        - info
+        - person
+        - people
+        - person-plus
+        - person-check
+        - chevron-up
+        - chevron-down
+        - chevron-left
+        - chevron-right
+        - chevron-double-up
+        - chevron-double-down
+        - chevron-double-left
+        - chevron-double-right
+        - arrow-up
+        - arrow-down
+        - arrow-left
+        - arrow-right
+        - arrow-up-right
+        - arrow-up-left
+        - arrow-down-right
+        - arrow-down-left
+        - arrow-repeat
+        - arrows-angle-expand
+        - arrows-angle-contract
+        - play
+        - pause
+        - skip-backward
+        - skip-forward
+        - circle
+        - circle-fill
+        - record-circle
+        - arrow-right-circle-fill
+        - arrow-left-circle-fill
+        - arrow-up-circle-fill
+        - arrow-down-circle-fill
+        - caret-right-fill
+        - caret-left-fill
+        - caret-up-fill
+        - caret-down-fill
+      default: search
+      examples:
+        - search
+      meta:enum:
+        search: Search
+        facebook: Facebook
+        twitter-x: Twitter X
+        instagram: Instagram
+        linkedin: LinkedIn
+        x: Close (X)
+        plus: Plus
+        exclamation: Exclamation
+        check: Check
+        dash: Dash
+        question: Question
+        info: Info
+        person: Person
+        people: People
+        person-plus: Person Plus
+        person-check: Person Check
+        chevron-up: Chevron Up
+        chevron-down: Chevron Down
+        chevron-left: Chevron Left
+        chevron-right: Chevron Right
+        chevron-double-up: Chevron Double Up
+        chevron-double-down: Chevron Double Down
+        chevron-double-left: Chevron Double Left
+        chevron-double-right: Chevron Double Right
+        arrow-up: Arrow Up
+        arrow-down: Arrow Down
+        arrow-left: Arrow Left
+        arrow-right: Arrow Right
+        arrow-up-right: Arrow Up Right
+        arrow-up-left: Arrow Up Left
+        arrow-down-right: Arrow Down Right
+        arrow-down-left: Arrow Down Left
+        arrow-repeat: Arrow Repeat
+        arrows-angle-expand: Expand
+        arrows-angle-contract: Contract
+        play: Play
+        pause: Pause
+        skip-backward: Skip Backward
+        skip-forward: Skip Forward
+        circle: Circle
+        circle-fill: Circle Filled
+        record-circle: Record Circle
+        arrow-right-circle-fill: Arrow Right Circle Filled
+        arrow-left-circle-fill: Arrow Left Circle Filled
+        arrow-up-circle-fill: Arrow Up Circle Filled
+        arrow-down-circle-fill: Arrow Down Circle Filled
+        caret-right-fill: Caret Right Filled
+        caret-left-fill: Caret Left Filled
+        caret-up-fill: Caret Up Filled
+        caret-down-fill: Caret Down Filled
+    label:
+      type: string
+      title: Label
+      description: Label for the button in its closed state. Exposed only to assistive technology unless "Show label" is on.
+      default: Search
+      examples:
+        - Search
+    open_label:
+      type: string
+      title: Open state label
+      description: Label announced on the button while the panel is open, and shown in its place when "Show label" is on.
+      default: Close search
+      examples:
+        - Close search
+    show_label:
+      type: boolean
+      title: Show label
+      description: Print the label text next to the icon, once the header is wide enough to show its menu as a row. Below that the header is an icon line, so the label stays available to assistive technology only.
+      default: false
+      examples:
+        - false
+    placement:
+      type: string
+      title: Panel alignment
+      description: Which side of the button the popover panel aligns to (logical, RTL-aware).
+      enum:
+        - end
+        - start
+      meta:enum:
+        end: End side
+        start: Start side
+      default: end
+      examples:
+        - end
+    expand_in_editor:
+      type: boolean
+      title: Expand in Canvas editor
+      description: Force the panel open while previewed inside the Drupal Canvas editor, so its "content" slot stays reachable for dropping components in. Turn off once content is placed, if the always-open panel clutters the editor view — the front-end open/close behavior is unaffected either way.
+      default: true
+      examples:
+        - true
+    panel:
+      type: string
+      title: Panel style
+      description: "How the revealed panel looks. A boxed popover drops below the button; an inline bar stretches across the header row (desktop) or a full-width row below it (mobile), carrying the field and a round accent submit disc on one hairline-underlined line."
+      enum:
+        - popover
+        - bar
+      meta:enum:
+        popover: Boxed popover
+        bar: Inline bar
+      default: popover
+      examples:
+        - popover
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: HTML attributes for the root element.
+slots:
+  content:
+    title: Content
+    description: "The content revealed in the popover, e.g. the 'Exposed form: search-page' block for a search toggle."
+libraryOverrides:
+  dependencies:
+    - core/drupal
+    - core/once
+    # Bootstrap 5.3's Dropdown plugin drives the disclosure (show/hide,
+    # aria-expanded, Escape, outside click, focus return, and Popper's
+    # flip/shift). It is not in the theme's global bootstrap-scripts bundle, so
+    # the component asks for it and SDC attaches it only where it is used.
+    - mc_college/bs-dropdown-script

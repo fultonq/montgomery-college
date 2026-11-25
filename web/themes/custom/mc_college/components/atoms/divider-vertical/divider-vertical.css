@@ -1,0 +1,14 @@
+.divider-vertical {
+  --divider-vertical-min-height: 1rem;
+
+  display: inline-block;
+  align-self: stretch;
+  width: 0;
+  height: auto;
+  min-height: max(var(--divider-vertical-min-height), 100%);
+  border-color: var(--bs-border-color);
+}
+
+.row > :has(> .divider-vertical) {
+  align-self: stretch;
+}

@@ -1,0 +1,17 @@
+grade own course sessions:
+  title: 'Grade own course sessions'
+  description: 'View the roster of, change registration state for, and enter grades in course sessions where the user is the assigned Professor.'
+view own academic record:
+  title: 'View own academic record and transcript'
+view student academic records:
+  title: 'View any student academic record and transcript'
+  description: 'Includes the student performance report. These are protected student education records.'
+  restrict access: true
+view college performance analytics:
+  title: 'View course and department performance analytics'
+  description: 'Aggregate outcomes only; no individual student records.'
+administer mc college settings:
+  title: 'Administer MC College academic policy'
+  restrict access: true
+manage own course registrations:
+  title: 'Manage own course schedule (drop and withdraw within deadlines)'

@@ -1,0 +1,22 @@
+mc_college_core.settings:
+  type: config_object
+  label: 'MC College academic policy'
+  mapping:
+    probation_gpa:
+      type: float
+      label: 'Probation below cumulative GPA'
+    deans_list_gpa:
+      type: float
+      label: "Dean's List minimum term GPA"
+    deans_list_min_credits:
+      type: integer
+      label: "Dean's List minimum graded credits"
+    non_matriculated_credit_cap:
+      type: integer
+      label: 'Non-matriculated maximum credits per semester'
+    matriculation_credit_threshold:
+      type: integer
+      label: 'Earned credits that require matriculation'
+    enforce_matriculation:
+      type: boolean
+      label: 'Block registration at the threshold'

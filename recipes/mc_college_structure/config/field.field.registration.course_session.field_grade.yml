@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.registration.field_grade
+    - registration.type.course_session
+  module:
+    - options
+id: registration.course_session.field_grade
+field_name: field_grade
+entity_type: registration
+bundle: course_session
+label: 'Grade'
+description: 'Final grade. Only Completed registrations with grades A-F count toward GPA.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

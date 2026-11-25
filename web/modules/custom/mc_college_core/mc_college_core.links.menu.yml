@@ -1,0 +1,10 @@
+mc_college_core.performance_analytics:
+  title: 'College performance'
+  description: 'GPA, success, and withdrawal rates by course, department, and student type.'
+  route_name: mc_college_core.performance_analytics
+  parent: system.admin_reports
+mc_college_core.settings:
+  title: 'MC College academic policy'
+  description: "Probation, Dean's List, and non-matriculated student rules."
+  route_name: mc_college_core.settings
+  parent: entity.user.admin_form

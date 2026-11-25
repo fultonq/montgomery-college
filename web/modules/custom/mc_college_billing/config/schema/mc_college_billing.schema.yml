@@ -1,0 +1,44 @@
+mc_college_billing.settings:
+  type: config_object
+  label: 'MC College tuition and fees'
+  mapping:
+    currency:
+      type: string
+      label: 'Currency code'
+    tuition_per_credit:
+      type: mapping
+      label: 'Tuition per credit by residency'
+      mapping:
+        in_district:
+          type: string
+          label: 'In-District'
+        out_of_district:
+          type: string
+          label: 'Out-of-District'
+        out_of_state:
+          type: string
+          label: 'Out-of-State'
+    technology_fee_per_credit:
+      type: string
+      label: 'Technology fee per credit'
+    term_fees:
+      type: sequence
+      label: 'Flat fees per term'
+      sequence:
+        type: mapping
+        mapping:
+          label:
+            type: label
+            label: 'Label'
+          amount:
+            type: string
+            label: 'Amount'
+    payment_instructions:
+      type: text
+      label: 'Payment instructions'
+    financial_hold_enabled:
+      type: boolean
+      label: 'Financial hold enabled'
+    financial_hold_threshold:
+      type: string
+      label: 'Financial hold threshold'

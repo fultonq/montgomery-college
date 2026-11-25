@@ -1,0 +1,261 @@
+name: 'Montgomery Community College Academic Structure'
+description: 'Content types, fields, vocabularies, registration workflow, grades, and roles for a community college.'
+type: 'Site'
+install:
+  - datetime
+  - datetime_range
+  - field
+  - link
+  - media
+  - media_library
+  - menu_ui
+  - node
+  - options
+  - path
+  - registration
+  - taxonomy
+  - text
+  - user
+  - workflows
+  - mc_college_core
+config:
+  strict: false
+  import:
+    node:
+      - field.storage.node.body
+  actions:
+    # Varbase uses Taxonomy Access Fix: each vocabulary needs explicit grants.
+    user.role.anonymous: &public_terms
+      grantPermissions:
+        - 'view terms in department'
+        - 'view term names in department'
+        - 'view terms in program_level'
+        - 'view term names in program_level'
+        - 'view terms in academic_year'
+        - 'view term names in academic_year'
+    user.role.authenticated: *public_terms
+    # Educare's program page shows badges bound to the first Program Type and
+    # Study Level; an empty value breaks rendering, so require both.
+    field.field.node.program.field_program_type:
+      setRequired: true
+    field.field.node.program.field_study_level:
+      setRequired: true
+    user.role.student:
+      grantPermissions:
+        - 'view own course_session registration'
+        - 'create course_session registration self'
+        - 'view own academic record'
+        - 'manage own course registrations'
+    user.role.professor:
+      grantPermissions:
+        - 'grade own course sessions'
+    user.role.registrar:
+      grantPermissions:
+        - 'view student academic records'
+        - 'view college performance analytics'
+        - 'administer course_session registration'
+        - 'administer course_session registration settings'
+        - 'edit course_session registration state'
+        - 'view any course_session registration'
+        - 'update any course_session registration'
+        - 'delete any course_session registration'
+        - 'access commerce_order overview'
+        - 'administer commerce_order'
+        - 'view commerce_order'
+    core.entity_form_display.node.program.default:
+      setComponents:
+        -
+          name: field_department
+          options:
+            type: options_select
+            settings: {  }
+            third_party_settings: {  }
+            weight: 20
+            region: content
+        -
+          name: field_program_level
+          options:
+            type: options_select
+            settings: {  }
+            third_party_settings: {  }
+            weight: 21
+            region: content
+        -
+          name: field_credits
+          options:
+            type: number
+            settings:
+              placeholder: ''
+            third_party_settings: {  }
+            weight: 22
+            region: content
+    core.entity_form_display.user.user.default:
+      createIfNotExists:
+        targetEntityType: user
+        bundle: user
+        mode: default
+        status: true
+      setComponents:
+        -
+          name: field_student_type
+          options:
+            type: options_select
+            settings: {  }
+            third_party_settings: {  }
+            weight: 20
+            region: content
+        -
+          name: field_student_id
+          options:
+            type: string_textfield
+            settings:
+              size: 60
+              placeholder: ''
+            third_party_settings: {  }
+            weight: 21
+            region: content
+        -
+          name: field_program
+          options:
+            type: entity_reference_autocomplete
+            settings:
+              match_operator: CONTAINS
+              match_limit: 10
+              size: 60
+              placeholder: ''
+            third_party_settings: {  }
+            weight: 22
+            region: content
+        -
+          name: field_residency
+          options:
+            type: options_select
+            settings: {  }
+            third_party_settings: {  }
+            weight: 23
+            region: content
+        -
+          name: field_enrollment_status
+          options:
+            type: options_select
+            settings: {  }
+            third_party_settings: {  }
+            weight: 24
+            region: content
+        -
+          name: field_matriculation_date
+          options:
+            type: datetime_default
+            settings: {  }
+            third_party_settings: {  }
+            weight: 25
+            region: content
+    core.entity_form_display.registration.course_session.default:
+      createIfNotExists:
+        targetEntityType: registration
+        bundle: course_session
+        mode: default
+        status: true
+      setComponents:
+        -
+          name: field_grade
+          options:
+            type: options_select
+            settings: {  }
+            third_party_settings: {  }
+            weight: 20
+            region: content
+    core.entity_view_display.user.user.default:
+      createIfNotExists:
+        targetEntityType: user
+        bundle: user
+        mode: default
+        status: true
+      setComponents:
+        -
+          name: field_student_type
+          options:
+            type: list_default
+            label: above
+            settings: {  }
+            third_party_settings: {  }
+            weight: 20
+            region: content
+        -
+          name: field_student_id
+          options:
+            type: string
+            label: above
+            settings:
+              link_to_entity: false
+            third_party_settings: {  }
+            weight: 21
+            region: content
+        -
+          name: field_program
+          options:
+            type: entity_reference_label
+            label: above
+            settings:
+              link: true
+            third_party_settings: {  }
+            weight: 22
+            region: content
+        -
+          name: field_residency
+          options:
+            type: list_default
+            label: above
+            settings: {  }
+            third_party_settings: {  }
+            weight: 23
+            region: content
+        -
+          name: field_enrollment_status
+          options:
+            type: list_default
+            label: above
+            settings: {  }
+            third_party_settings: {  }
+            weight: 24
+            region: content
+        -
+          name: field_matriculation_date
+          options:
+            type: datetime_custom
+            label: above
+            settings:
+              timezone_override: ''
+              date_format: 'F j, Y'
+            third_party_settings: {  }
+            weight: 25
+            region: content
+        -
+          name: field_gpa
+          options:
+            type: number_decimal
+            label: inline
+            settings:
+              thousand_separator: ''
+              decimal_separator: .
+              scale: 2
+              prefix_suffix: false
+            third_party_settings: {  }
+            weight: 30
+            region: content
+    core.entity_view_display.registration.course_session.default:
+      createIfNotExists:
+        targetEntityType: registration
+        bundle: course_session
+        mode: default
+        status: true
+      setComponents:
+        -
+          name: field_grade
+          options:
+            type: list_default
+            label: above
+            settings: {  }
+            third_party_settings: {  }
+            weight: 20
+            region: content

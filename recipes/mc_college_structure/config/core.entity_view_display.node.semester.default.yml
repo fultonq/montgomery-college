@@ -1,0 +1,86 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.semester.field_start_date
+    - field.field.node.semester.field_end_date
+    - field.field.node.semester.field_registration_open
+    - field.field.node.semester.field_registration_close
+    - field.field.node.semester.field_drop_deadline
+    - field.field.node.semester.field_withdraw_deadline
+    - field.field.node.semester.field_academic_year
+    - node.type.semester
+  module:
+    - datetime
+    - user
+id: node.semester.default
+targetEntityType: node
+bundle: semester
+mode: default
+content:
+  field_start_date:
+    type: datetime_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'F j, Y'
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_end_date:
+    type: datetime_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'F j, Y'
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_registration_open:
+    type: datetime_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'F j, Y'
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_registration_close:
+    type: datetime_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'F j, Y'
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_drop_deadline:
+    type: datetime_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'F j, Y'
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_withdraw_deadline:
+    type: datetime_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'F j, Y'
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_academic_year:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden: {  }

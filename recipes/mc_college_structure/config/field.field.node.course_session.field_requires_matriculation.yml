@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_requires_matriculation
+    - node.type.course_session
+id: node.course_session.field_requires_matriculation
+field_name: field_requires_matriculation
+entity_type: node
+bundle: course_session
+label: 'Restricted to Matriculated'
+description: 'Only matriculated students may self-register.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

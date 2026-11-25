@@ -1,0 +1,13 @@
+name: 'MC College Billing'
+type: module
+description: 'Tuition and fees: per-semester student bills from course registrations, payments recorded by the Bursar, student account statements, and balances reporting.'
+package: 'MC College'
+core_version_requirement: ^11
+configure: mc_college_billing.settings
+dependencies:
+  - commerce:commerce_order
+  - commerce:commerce_payment
+  - commerce:commerce_price
+  - commerce:commerce_store
+  - mc_college_core:mc_college_core
+  - registration:registration

@@ -1,0 +1,103 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.semester.field_start_date
+    - field.field.node.semester.field_end_date
+    - field.field.node.semester.field_registration_open
+    - field.field.node.semester.field_registration_close
+    - field.field.node.semester.field_drop_deadline
+    - field.field.node.semester.field_withdraw_deadline
+    - field.field.node.semester.field_academic_year
+    - node.type.semester
+  module:
+    - datetime
+    - options
+    - path
+id: node.semester.default
+targetEntityType: node
+bundle: semester
+mode: default
+content:
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_start_date:
+    type: datetime_default
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_end_date:
+    type: datetime_default
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_registration_open:
+    type: datetime_default
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_registration_close:
+    type: datetime_default
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_drop_deadline:
+    type: datetime_default
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_withdraw_deadline:
+    type: datetime_default
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_academic_year:
+    type: options_select
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  created:
+    type: datetime_timestamp
+    weight: 90
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 91
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 92
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 120
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  promote: true
+  sticky: true

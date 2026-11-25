@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - registration
+    - options
+id: registration.field_grade
+field_name: field_grade
+entity_type: registration
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: A
+      label: 'A (4.0)'
+    -
+      value: B
+      label: 'B (3.0)'
+    -
+      value: C
+      label: 'C (2.0)'
+    -
+      value: D
+      label: 'D (1.0)'
+    -
+      value: F
+      label: 'F (0.0)'
+    -
+      value: P
+      label: 'P (Pass, not in GPA)'
+    -
+      value: I
+      label: 'I (Incomplete, not in GPA)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

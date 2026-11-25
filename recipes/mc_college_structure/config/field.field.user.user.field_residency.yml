@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_residency
+  module:
+    - options
+id: user.user.field_residency
+field_name: field_residency
+entity_type: user
+bundle: user
+label: 'Residency'
+description: 'Determines the tuition rate.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

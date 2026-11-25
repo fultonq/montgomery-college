@@ -1,0 +1,12 @@
+academic:
+  version: VERSION
+  css:
+    component:
+      css/academic.css: {}
+print:
+  version: VERSION
+  js:
+    js/print.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

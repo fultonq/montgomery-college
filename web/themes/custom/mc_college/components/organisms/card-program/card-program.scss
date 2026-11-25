@@ -1,0 +1,60 @@
+// @file card-program component styles.
+@import "../../defaults";
+
+.card-program {
+  .stretched-link { z-index: 99; }
+
+  // 2rem between the title side and the metadata columns (no exact utility).
+  .card-body { column-gap: #{$spacer * 2}; }
+
+  &__title-wrap {
+    // Keep the accent line + title tight; 0.75rem has no exact utility.
+    gap: #{$spacer * 0.75};
+    overflow: hidden;
+  }
+
+  &__title {
+    // Wrap on phones, where the degrees stack below the title.
+    @include media-breakpoint-up(md) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    // H4 scale, semibold, sentence-case (opt out of the global heading capitalize).
+    font-size: $h4-font-size;
+    font-weight: $font-weight-semibold;
+    line-height: 1.35;
+    text-transform: none;
+  }
+
+  // Accent line: grows from 0 to full width on row hover/focus, pushing the
+  // title over. Gap on __title-wrap keeps the spacing constant regardless.
+  &__line {
+    --line-height: #{$spacer * 0.0625};   // 0.0625rem = 1px
+    --line-width: #{$spacer};              // 1rem
+    --line-transition-duration: 0.35s;
+    --line-transition-easing: ease;
+    width: 0;
+    height: var(--line-height);
+    background: var(--bs-secondary-color);
+    transition: width var(--line-transition-duration) var(--line-transition-easing);
+  }
+
+  &:hover &__line,
+  &:focus-within &__line {
+    width: var(--line-width);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__line {
+      transition: none;
+    }
+  }
+
+  &__col {
+    // 1.25rem body text; natural width, spaced by the columns gap.
+    font-size: #{$spacer * 1.25};
+    color: var(--bs-body-color);
+  }
+}

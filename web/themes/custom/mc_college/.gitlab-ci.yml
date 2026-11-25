@@ -1,0 +1,149 @@
+################################################################################
+# Basic GitLab CI for Vartheme BS5 Educare.
+#
+# A self-contained build + validate pipeline modeled on the Varbase project CI:
+# build the theme + component assets, then run the JS / CSS / YAML / spelling
+# linters for visibility. The lints run but do not fail the stage (`|| true`),
+# so the basic pipeline stays green. Drop the `|| true` from a job to make that
+# individual check blocking.
+################################################################################
+
+stages:
+  - build
+  - validate
+  - test
+
+variables:
+  # Yarn 4 defaults to immutable installs in CI and would refuse to touch the
+  # lockfile; allow it so `yarn install` works on every job.
+  YARN_ENABLE_IMMUTABLE_INSTALLS: "false"
+  DRUPAL_CMS_TELEMETRY: "0"
+
+default:
+  image: node:24
+  before_script:
+    - corepack enable
+    - 'test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml'
+    - yarn install
+
+# = Build stage =
+
+# Compile the theme assets (SCSS -> CSS) and the SDC component styles.
+build:
+  stage: build
+  script:
+    - node --version
+    - yarn theme:full-build
+
+# = Validate stage =
+
+eslint:
+  stage: validate
+  script:
+    - yarn lint:js || true
+    - yarn lint:yaml || true
+  allow_failure: false
+
+stylelint:
+  stage: validate
+  script:
+    - yarn lint:css || true
+  allow_failure: false
+
+cspell:
+  stage: validate
+  script:
+    - yarn spellcheck || true
+  allow_failure: false
+
+
+# = Test stage =
+
+# Build a Varbase 11 project, install the Educare site template (which sets
+# this theme as the default) with the checked-out theme substituted in via a
+# Composer path repository, then drive the site in the browser with the Varbase
+# functional testing suite (varbase-e2e / Playwright + Cucumber-js).
+"🧪 Automated Functional Testing":
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.63.0-noble
+  needs: []
+  timeout: 2h
+  retry:
+    max: 1
+    when: [runner_system_failure, stuck_or_timeout_failure]
+  services:
+    - name: mariadb:10.11
+      alias: database
+      command: ["--max-allowed-packet=64M", "--innodb-buffer-pool-size=256M", "--wait-timeout=28800"]
+      variables:
+        MARIADB_DATABASE: drupal
+        MARIADB_USER: drupal
+        MARIADB_PASSWORD: drupal
+        MARIADB_ROOT_PASSWORD: root
+  variables:
+    SITE_DIR: "$CI_PROJECT_DIR/../varbase-site"
+    DB_URL: "mysql://drupal:drupal@database/drupal"
+    VARBASE_PROJECT: "drupal/varbase_project:11.0.x-dev"
+    DRUPAL_ADMIN_USERNAME: "webmaster"
+    DRUPAL_ADMIN_PASSWORD: "dD.123123ddd"
+    LAUNCH_URL: "http://127.0.0.1:8888"
+    COMPOSER_ALLOW_SUPERUSER: "1"
+    COMPOSER_MEMORY_LIMIT: "-1"
+    COMPOSER_NO_INTERACTION: "1"
+  artifacts:
+    when: always
+    paths:
+      - tests/reports/
+      - tests/screenshots/
+    expire_in: 7 days
+  before_script:
+    - apt-get update -y
+    - apt-get install -y --no-install-recommends software-properties-common ca-certificates curl gnupg lsb-release
+    - add-apt-repository -y ppa:ondrej/php
+    - apt-get update -y
+    - apt-get install -y --no-install-recommends php8.5-cli php8.5-mysql php8.5-gd php8.5-curl php8.5-xml php8.5-mbstring php8.5-zip php8.5-intl unzip git default-mysql-client webp imagemagick libmagickcore-6.q16-6-extra
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - corepack enable || true
+    - sed -i 's/rights="none"\s*pattern="WEBP"/rights="read|write" pattern="WEBP"/I' /etc/ImageMagick-*/policy.xml 2>/dev/null || true
+  script:
+    - composer create-project $VARBASE_PROJECT "$SITE_DIR" --no-interaction --no-install --no-scripts
+    - cd "$SITE_DIR"
+    - composer config minimum-stability dev
+    # Substitute the checked-out theme for the packaged one; the version alias
+    # lets the site template's 1.0.x-dev constraint resolve to this checkout.
+    - composer config repositories.theme --json '{"type":"path","url":"'"$CI_PROJECT_DIR"'","options":{"versions":{"drupal/vartheme_bs5_educare":"1.0.x-dev"}}}'
+    - composer require drupal/educare:1.0.x-dev --no-interaction --no-progress --prefer-dist --with-all-dependencies
+    - ./bin/drush site:install recipes/educare --db-url=$DB_URL
+        --account-name=$DRUPAL_ADMIN_USERNAME --account-pass=$DRUPAL_ADMIN_PASSWORD
+        --account-mail=webmaster@vardot.com --site-name="Educare Theme Test" --locale=en -y
+    - ./bin/drush config:set system.logging error_level all -y
+    - ./bin/drush cache:rebuild
+    - ./bin/drush runserver 127.0.0.1:8888 > $CI_PROJECT_DIR/runserver.log 2>&1 &
+    - sleep 8
+    - cd "$CI_PROJECT_DIR"
+    # Explicit floor: 2.0.8 brings Cucumber 12 itself, so nothing installs
+    # @cucumber/cucumber beside it (two copies stop the suite before a step runs).
+    - npm install --no-save --no-audit --no-fund "@vardot/varbase-e2e@^2.0.8"
+    - ./node_modules/.bin/playwright install chromium
+    - VARBASE_E2E_REPORT_DISABLE=1 ./node_modules/.bin/cucumber-js --config cucumber.js --tags "not @wip"
+  after_script:
+    - cd "$CI_PROJECT_DIR"
+    - export REPORT="vartheme_bs5_educare--${CI_COMMIT_REF_SLUG:-local}--automated-functional-testing-report--$(date +%Y-%m-%d)"
+    # When the job failed before the tests ran (a red site:install, a database
+    # that went away), there is no node_modules and no cucumber JSON. Say so in
+    # one line instead of letting node dump a MODULE_NOT_FOUND stack that buries
+    # the real failure higher up the log.
+    - if [ ! -f ./node_modules/@vardot/varbase-e2e/bin/generate-reports.js ]; then
+        echo "varbase-e2e is not installed - the job failed before the tests ran. No report to generate.";
+        exit 0;
+      fi
+    - if [ ! -f tests/reports/cucumber_report.json ]; then
+        echo "No cucumber JSON - the tests did not run. No report to generate.";
+        exit 0;
+      fi
+    - node ./node_modules/@vardot/varbase-e2e/bin/generate-reports.js
+        --json tests/reports/cucumber_report.json
+        --out  "tests/reports/${REPORT}.html"
+        --format all
+        --pdf-out "tests/reports/${REPORT}.pdf" || true
+  allow_failure: false

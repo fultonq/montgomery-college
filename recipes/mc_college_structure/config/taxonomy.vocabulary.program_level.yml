@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Program Level'
+vid: program_level
+description: 'Credential level awarded (A.A., A.S., A.A.S., Certificate, Letter of Recognition).'
+weight: 0
+new_revision: false

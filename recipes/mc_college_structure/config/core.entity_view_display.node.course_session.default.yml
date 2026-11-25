@@ -1,0 +1,95 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.course_session.field_course
+    - field.field.node.course_session.field_semester
+    - field.field.node.course_session.field_professor
+    - field.field.node.course_session.field_date_time
+    - field.field.node.course_session.field_location
+    - field.field.node.course_session.field_capacity
+    - field.field.node.course_session.field_requires_matriculation
+    - field.field.node.course_session.field_registration
+    - node.type.course_session
+  module:
+    - datetime_range
+    - registration
+    - user
+id: node.course_session.default
+targetEntityType: node
+bundle: course_session
+mode: default
+content:
+  field_course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_semester:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_professor:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_date_time:
+    type: daterange_custom
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'D, M j, Y g:i A'
+      separator: '-'
+      from_to: both
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_location:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_capacity:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_requires_matriculation:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_registration:
+    type: registration_link
+    label: hidden
+    settings:
+      label: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden: {  }

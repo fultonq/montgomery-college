@@ -1,0 +1,79 @@
+@import "../defaults";   // Global defaults.
+
+// MC College Edge to Edge layout for content.
+// -----------------------------------------------------------------------------
+//
+// Bumped specificity to override Bootstrap RTL utility classes (.ms-0 / .me-0)
+// that the canvas section component applies as defaults; without this the
+// negative margins are zeroed out under [dir="rtl"] and the element is pushed
+// off-canvas.
+
+// Break out to the full width of the *available* content band, not the raw
+// viewport. Subtracting Drupal's displace offsets keeps edge-to-edge sections
+// (and the header) aligned with the page when the Gin/Navigation admin sidebar
+// or toolbar shifts the content — otherwise 100vw reaches under the sidebar and
+// the logo/content overlap it. Anonymous visitors have 0 offsets, so this is
+// identical to the previous 100vw behavior.
+%bg-edge2edge-base {
+  --e2e-band: calc(
+    100vw - var(--drupal-displace-offset-left, 0px) -
+      var(--drupal-displace-offset-right, 0px)
+  );
+
+  position: relative;
+  inset-inline-start: 50%;
+  inset-inline-end: auto;
+  flex: 0 0 var(--e2e-band);
+  width: var(--e2e-band);
+  max-width: none;
+  margin-inline-start: calc(-0.5 * var(--e2e-band)) !important;
+  margin-inline-end: calc(-0.5 * var(--e2e-band)) !important;
+  margin-left: calc(-0.5 * var(--e2e-band)) !important;
+  margin-right: calc(-0.5 * var(--e2e-band)) !important;
+}
+
+.bg-edge2edge,
+[dir="rtl"] .bg-edge2edge,
+.bg-edge2edge.ms-0,
+.bg-edge2edge.me-0,
+[dir="rtl"] .bg-edge2edge.ms-0,
+[dir="rtl"] .bg-edge2edge.me-0 {
+  @extend %bg-edge2edge-base;
+}
+
+.bg-edge2edge {
+  &::before {
+    display: table;
+    content: " ";
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+// Clip the horizontal overflow the edge-to-edge band produces: `100vw` includes
+// the classic scrollbar, the content box does not, so every `.bg-edge2edge`
+// section is a scrollbar-width wider than the page.
+//
+// This MUST be `clip`, never `hidden`. Per CSS Overflow 3, an `overflow-x` of
+// `hidden` forces an `overflow-y` of `visible` to compute to `auto`, which
+// turns the element into a scroll container. On `body` that is what freezes the
+// page: while the body-to-viewport overflow propagation holds the page still
+// scrolls, but the moment anything stops that propagation (an `html` overflow
+// set by an admin toolbar, a scroll-lock, a modal or offcanvas backdrop) the
+// viewport can no longer scroll and `body` cannot either, because its height is
+// its content height. The page is then frozen with a stray inner scrollbar and
+// neither the wheel nor the keyboard moves it.
+//
+// `clip` clips without creating a scroll container and leaves `overflow-y` as
+// `visible`, so vertical scrolling always stays on the viewport. Declaring it on
+// `html` as well makes the viewport authoritative, which both removes the last
+// pixels of horizontal scroll and keeps a third party setting `html { overflow }`
+// from resurrecting the lockup.
+// @see https://drafts.csswg.org/css-overflow-3/#overflow-properties
+html,
+body {
+  overflow-x: hidden !important; // Fallback for browsers without `clip`.
+  overflow-x: clip !important;
+}

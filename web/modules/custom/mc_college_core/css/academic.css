@@ -1,0 +1,62 @@
+/**
+ * @file
+ * Academic record, transcript, and analytics styles.
+ */
+.mc-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin-block: 1rem 1.5rem;
+}
+.mc-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.9rem 1rem;
+  border: 1px solid #dfe3e8;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+.mc-stat__value { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+.mc-stat__label { color: #5b6472; font-size: 0.875rem; }
+.mc-standing--good .mc-stat__value, td.mc-standing--good { color: #1e7d34; }
+.mc-standing--probation .mc-stat__value, td.mc-standing--probation { color: #b42318; font-weight: 700; }
+.mc-standing--none .mc-stat__value { color: #5b6472; }
+
+.mc-alert {
+  margin-block: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-inline-start: 4px solid;
+  border-radius: 0.25rem;
+}
+.mc-alert--info { border-color: #005a9c; background: #eaf3fb; }
+.mc-alert--warning { border-color: #b54708; background: #fff6e5; }
+.mc-alert--error { border-color: #b42318; background: #fdecea; }
+
+.mc-table { width: 100%; margin-block-end: 1.5rem; }
+.mc-table caption { caption-side: top; text-align: start; font-weight: 700; font-size: 1.1rem; padding-block: 0.5rem; }
+.mc-table tfoot td { font-size: 0.9rem; background: #f6f7f9; }
+.mc-profile { width: auto; margin-block-end: 1rem; }
+.mc-profile th { padding-inline-end: 1.5rem; text-align: start; }
+.mc-muted { color: #5b6472; font-size: 0.9rem; }
+.mc-filters { margin-block-end: 1rem; }
+.mc-export { margin-block: 0.5rem; }
+
+.mc-bar { display: inline-block; width: 8rem; height: 0.6rem; border-radius: 999px; background: #eceef1; overflow: hidden; vertical-align: middle; }
+.mc-bar > span { display: block; height: 100%; background: #51237f; }
+
+.mc-dist { display: flex; width: 14rem; height: 1.1rem; border-radius: 0.25rem; overflow: hidden; font-size: 0.7rem; line-height: 1.1rem; color: #fff; text-align: center; }
+.mc-dist__seg { display: block; min-width: 2px; }
+.mc-dist .mc-mark--a { background: #1e7d34; }
+.mc-dist .mc-mark--b { background: #4f9a3a; }
+.mc-dist .mc-mark--c { background: #a07800; }
+.mc-dist .mc-mark--d { background: #c2410c; }
+.mc-dist .mc-mark--f { background: #b42318; }
+.mc-dist .mc-mark--p { background: #005a9c; }
+.mc-dist .mc-mark--i { background: #5b6472; }
+.mc-dist .mc-mark--w { background: #7a8594; }
+td.mc-mark { font-weight: 700; }
+
+@media print {
+  .no-print, header, footer, nav, .tabs, .local-tasks, .breadcrumb, .mc-print { display: none !important; }
+  .mc-table { font-size: 10pt; page-break-inside: avoid; }
+}

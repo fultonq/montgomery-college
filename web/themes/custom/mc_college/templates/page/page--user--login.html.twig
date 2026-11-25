@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Page user login.
+ */
+#}
+
+{% include 'mc_college:page-user-login' with {
+  without_blocks: [
+    'mc_college_local_tasks',
+    'mc_college_breadcrumbs',
+    'mc_college_local_actions',
+    'mc_college_page_title'
+  ]
+} %}

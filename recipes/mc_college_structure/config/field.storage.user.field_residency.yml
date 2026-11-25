@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+    - options
+id: user.field_residency
+field_name: field_residency
+entity_type: user
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: in_district
+      label: 'In-District'
+    -
+      value: out_of_district
+      label: 'Out-of-District'
+    -
+      value: out_of_state
+      label: 'Out-of-State'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

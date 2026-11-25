@@ -1,0 +1,33 @@
+mc_college_core.academic_record_tab:
+  route_name: mc_college_core.academic_record
+  base_route: entity.user.canonical
+  title: 'Academic record'
+  weight: 20
+mc_college_core.transcript_tab:
+  route_name: mc_college_core.transcript
+  base_route: entity.user.canonical
+  title: 'Transcript'
+  weight: 21
+mc_college_core.analytics_tab:
+  route_name: mc_college_core.performance_analytics
+  base_route: mc_college_core.performance_analytics
+  title: 'Courses and departments'
+mc_college_core.students_tab:
+  route_name: mc_college_core.student_performance
+  base_route: mc_college_core.performance_analytics
+  title: 'Students'
+mc_college_core.schedule_tab:
+  route_name: mc_college_core.schedule
+  base_route: entity.user.canonical
+  title: 'Schedule'
+  weight: 19
+mc_college_core.teaching_tab:
+  route_name: mc_college_core.teaching
+  base_route: entity.user.canonical
+  title: 'Teaching'
+  weight: 22
+mc_college_core.grade_roster_tab:
+  route_name: mc_college_core.grade_roster
+  base_route: entity.node.canonical
+  title: 'Roster and grades'
+  weight: 30

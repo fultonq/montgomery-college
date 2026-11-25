@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - workflows.workflow.course_registration
+id: course_session
+label: 'Course session'
+workflow: course_registration
+defaultState: enrolled
+heldExpireTime: 0
+heldExpireState: dropped

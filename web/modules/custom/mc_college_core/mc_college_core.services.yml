@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+  mc_college_core.academic_records:
+    class: Drupal\mc_college_core\Academic\AcademicRecords
+  Drupal\mc_college_core\Academic\AcademicRecords: '@mc_college_core.academic_records'
+  mc_college_core.enrollment:
+    class: Drupal\mc_college_core\Enrollment\EnrollmentManager
+  Drupal\mc_college_core\Enrollment\EnrollmentManager: '@mc_college_core.enrollment'

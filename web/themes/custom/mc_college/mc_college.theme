@@ -1,0 +1,295 @@
+<?php
+
+/**
+ * @file
+ * Theme functions to support MC College theme.
+ */
+
+use Drupal\Core\Language\LanguageInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function mc_college_theme($existing, $type, $theme, $path) {
+  return [
+    'media_oembed_iframe__remote_video__varbase_heroslider' => [
+      'template' => 'media/media-oembed-iframe--remote-video--varbase-heroslider',
+      'variables' => [
+        'provider' => NULL,
+        'media' => NULL,
+        'base_path' => base_path(),
+        'mc_college' => \Drupal::service('extension.list.theme')->getPath('mc_college'),
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function mc_college_preprocess_media_oembed_iframe__remote_video__varbase_heroslider(&$variables) {
+  // Send variables for the remote_video varbase heroslier oembed iframe.
+  $query = \Drupal::request()->query;
+  $variables['type'] = $query->get('type');
+  $variables['provider'] = $query->get('provider');
+  $variables['view_mode'] = $query->get('view_mode');
+  $variables['base_path'] = base_path();
+  $variables['mc_college'] = \Drupal::service('extension.list.theme')->getPath('mc_college');
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function mc_college_library_info_alter(array &$libraries, $module) {
+  if ($module === 'sitewide_alert' && isset($libraries['init'])) {
+    // Add the dependency only if it's not already present.
+    if (!in_array('core/components.mc_college--alert', $libraries['init']['dependencies'])) {
+      $libraries['init']['dependencies'][] = 'core/components.mc_college--alert';
+    }
+    unset($libraries['init']['css']);
+  }
+
+  // Load components root and styles for CKEditor5 styles.
+  if ($module === 'ckeditor5' && isset($libraries['internal.drupal.ckeditor5.stylesheets'])) {
+    $libraries['internal.drupal.ckeditor5.stylesheets']['dependencies'][] = 'mc_college/ckeditor5-root';
+    $libraries['internal.drupal.ckeditor5.stylesheets']['dependencies'][] = 'mc_college/ckeditor5-styles';
+  }
+
+  // Replace the Popper.js library file from the Responsive Theme preview module.
+  // MC College need a different version which still
+  // works for the Responsive Theme preview module.
+  if ($module === 'responsive_preview'
+    && isset($libraries['drupal.responsive-preview'])
+    && isset($libraries['drupal.responsive-preview']['js'])
+    && isset($libraries['drupal.responsive-preview']['js']['js/popperjs/popper.min.js'])) {
+
+    unset($libraries['drupal.responsive-preview']['js']['js/popperjs/popper.min.js']);
+    $libraries['drupal.responsive-preview']['dependencies'][] = 'mc_college/popper-script';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function mc_college_preprocess_field(&$variables) {
+  $ckeditor5_fields = [
+    'text_with_summary',
+    'text_long',
+  ];
+
+  // Check if the field type is in the list of CKEditor5 fields.
+  if (in_array($variables['field_type'], $ckeditor5_fields)) {
+    // Attach the library to the field.
+    $variables['#attached']['library'][] = 'mc_college/ckeditor5-styles';
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function mc_college_preprocess_menu(&$variables, $hook, $info) {
+  // Checks the nested level of a menu.
+  mc_college_process_menu_level($variables['items']);
+}
+
+/**
+ * Add menu_link_level to menus.
+ */
+function mc_college_process_menu_level(&$menu_items, $menu_level = 1) {
+  foreach ($menu_items as &$menu_item) {
+    // Set the menu level for the current item.
+    $menu_item['menu_link_level'] = $menu_level;
+
+    // If there are child items, process them recursively.
+    if (!empty($menu_item['below'])) {
+      mc_college_process_menu_level($menu_item['below'], $menu_level + 1);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function mc_college_preprocess_page(&$variables) {
+  // Add the print logo.
+  $variables['logo_print'] = \Drupal::request()->getBaseUrl() . '/' . \Drupal::service('extension.list.theme')->getPath('mc_college') . '/logo-print.png';
+
+  // Add the white logo.
+  $variables['logo_white'] = \Drupal::request()->getBaseUrl() . '/' . \Drupal::service('extension.list.theme')->getPath('mc_college') . '/logo-white.svg';
+
+  // Add the site name and slogan.
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_slogan'] = \Drupal::config('system.site')->get('slogan');
+
+  $mc_college_contained_regions = [
+    'container_header',
+    'container_content',
+    'container_footer',
+  ];
+
+  foreach ($mc_college_contained_regions as $contained_region) {
+    $theme_settings_for_contained_region = theme_get_setting($contained_region);
+    if (isset($theme_settings_for_contained_region)
+      && $theme_settings_for_contained_region !== '') {
+      $variables[$contained_region] = $theme_settings_for_contained_region;
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function mc_college_preprocess_page_title(&$variables) {
+
+  // Hide page title for the front page and let screen readers only see it.
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $variables['title_attributes']['class'][] = 'visually-hidden';
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function mc_college_preprocess_html(&$variables) {
+
+  // The path for MC College theme in variables.
+  $variables['mc_college_path'] = \Drupal::request()->getSchemeAndHttpHost() . \Drupal::request()->getBaseUrl() . '/' . \Drupal::service('extension.list.theme')->getPath('mc_college');
+
+  // Sticky header toggle (theme setting, defaults to enabled). Attach the
+  // sticky-header library (its own styles + behavior) only when enabled, so
+  // nothing loads when the feature is off.
+  if (theme_get_setting('sticky_header') ?? TRUE) {
+    $variables['#attached']['library'][] = 'mc_college/sticky-header';
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function mc_college_form_alter(&$form, $form_state, $form_id) {
+
+  // Have a default style for moderation entity form.
+  if ($form_id == 'content_moderation_entity_moderation_form') {
+    $form['#attributes']['class'][] = 'card card-body bg-light mb-3';
+  }
+
+  // Have a default style for the moderation status in the layout editing node pages.
+  if ((preg_match('/^node_.*._layout_builder_form$/', $form_id)
+    && isset($form['moderation_state']))) {
+    $form['moderation_state']['#attributes']['class'][] = 'card card-body bg-light mb-3';
+    $form['#attached']['library'][] = 'mc_college/content_moderation';
+  }
+
+  // Load the exposed-filters SDC CSS only where a views exposed form renders.
+  if ($form_id === 'views_exposed_form') {
+    $form['#attached']['library'][] = 'core/components.mc_college--views-exposed-filters';
+  }
+
+  // Blog exposed filter row.
+  // Search-by placeholder + label-hide are config-driven (BEF advanced settings
+  // in views.view.blog). Only the select empty-option labels need a form alter,
+  // since Views/BEF expose no config for the "- Any -" option text.
+  if ($form_id === 'views_exposed_form' && ($form['#id'] ?? '') === 'views-exposed-form-blog-all') {
+    if (isset($form['type']['#options']['All'])) {
+      $form['type']['#options']['All'] = t('Select type');
+    }
+    if (isset($form['industry']['#options']['All'])) {
+      $form['industry']['#options']['All'] = t('Select industry');
+    }
+  }
+
+  // Events exposed filter row (components_exposed_form).
+  // Core builds the Reset action but hides it (#access FALSE) until an exposed
+  // input is present; BEF listings (News, Programs) show it always via
+  // reset_button_always_show, which components_exposed_form has no equivalent
+  // for. Reveal the already-built, functional Reset so the events filter row
+  // matches the other listings. Upstream gap in Varbase Components.
+  if ($form_id === 'views_exposed_form'
+    && ($form_state->get('view')?->id() ?? '') === 'events'
+    && isset($form['actions']['reset'])) {
+    $form['actions']['reset']['#access'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function mc_college_preprocess_user(&$variables) {
+  $user = $variables['user'] ?? NULL;
+  if (!$user || !$user->id()) {
+    return;
+  }
+  if (!$user->access('update')) {
+    return;
+  }
+  // On the owner's own profile, the Profile details card (the
+  // varbase_user_profile_details ECA model) carries the picture, the member
+  // for time and these actions, so do not print them twice. The card's field
+  // varies by user, which keeps this cached per user.
+  if (isset($variables['elements']['eca_render__varbase_user_profile_details']) && $user->id() == \Drupal::currentUser()->id()) {
+    unset($variables['content']['user_picture'], $variables['content']['member_for']);
+    return;
+  }
+  $variables['user_actions'] = [
+    'edit' => [
+      '#type' => 'link',
+      '#title' => t('Edit profile'),
+      '#url' => \Drupal\Core\Url::fromRoute('entity.user.edit_form', ['user' => $user->id()]),
+      '#attributes' => ['class' => ['btn', 'btn-primary', 'user__action-edit']],
+    ],
+    'logout' => [
+      '#type' => 'link',
+      '#title' => t('Log out'),
+      '#url' => \Drupal\Core\Url::fromRoute('user.logout'),
+      '#attributes' => ['class' => ['btn', 'btn-secondary', 'user__action-logout', 'ms-2']],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_login_with().
+ */
+function mc_college_preprocess_login_with(&$variables) {
+
+  // Check if the Social Auth module exists and social networks are set.
+  if (!\Drupal::moduleHandler()->moduleExists('social_auth') || empty($variables['networks'])) {
+    return;
+  }
+
+  if (is_array($variables['networks']) && $variables['networks'] > 0) {
+    foreach ($variables['networks'] as $id => $network) {
+      $network_definition = $network->getPluginDefinition();
+      if (isset($network_definition['img_path'])) {
+        $theme_path = \Drupal::service('extension.list.theme')->getPath('mc_college');
+        $network_img_path_in_mc_college = $theme_path . '/images/social_auth/' . $network_definition['provider'] . '/' . $network_definition['img_path'];
+
+        if (file_exists(DRUPAL_ROOT . '/' . $network_img_path_in_mc_college)) {
+          $variables['custom_networks'][$id] = [
+            'img_path' => $network_img_path_in_mc_college,
+          ];
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_region().
+ */
+function mc_college_preprocess_region(&$variables) {
+  $isFront = \Drupal::service('path.matcher')->isFrontPage();
+  if ($isFront && $variables["region"] === "header") {
+    $variables["is_front"] = $isFront;
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function mc_college_preprocess(&$variables, $hook, $info) {
+  $language = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
+  $language_direction = $language->getDirection();
+  $variables['lang_dir'] = $language_direction;
+}

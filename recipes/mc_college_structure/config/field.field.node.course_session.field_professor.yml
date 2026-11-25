@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_professor
+    - node.type.course_session
+    - user.role.professor
+id: node.course_session.field_professor
+field_name: field_professor
+entity_type: node
+bundle: course_session
+label: 'Professor'
+description: 'User account of the instructor (must have the Professor role).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    filter:
+      type: role
+      role:
+        professor: professor
+    include_anonymous: false
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

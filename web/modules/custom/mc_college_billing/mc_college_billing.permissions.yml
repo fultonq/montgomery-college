@@ -1,0 +1,8 @@
+view own student account:
+  title: 'View own tuition and fees statement'
+view student accounts:
+  title: 'View any student tuition and fees statement and the balances report'
+  restrict access: true
+administer mc college billing:
+  title: 'Administer tuition rates, fees, and financial holds'
+  restrict access: true

@@ -1,0 +1,35 @@
+mc_college_billing.account:
+  path: '/user/{user}/account'
+  defaults:
+    _controller: '\Drupal\mc_college_billing\Controller\StudentAccountController::account'
+    _title: 'Tuition and fees'
+  requirements:
+    _custom_access: '\Drupal\mc_college_billing\Controller\StudentAccountController::access'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+mc_college_billing.balances:
+  path: '/admin/commerce/student-balances'
+  defaults:
+    _controller: '\Drupal\mc_college_billing\Controller\StudentAccountController::balances'
+    _title: 'Student balances'
+  requirements:
+    _permission: 'view student accounts'
+
+mc_college_billing.balances_export:
+  path: '/admin/commerce/student-balances/export'
+  defaults:
+    _controller: '\Drupal\mc_college_billing\Controller\StudentAccountController::export'
+  requirements:
+    _permission: 'view student accounts'
+
+mc_college_billing.settings:
+  path: '/admin/commerce/config/tuition'
+  defaults:
+    _form: '\Drupal\mc_college_billing\Form\BillingSettingsForm'
+    _title: 'Tuition and fees'
+  requirements:
+    _permission: 'administer mc college billing'

@@ -1,0 +1,280 @@
+// @file
+// MC College — Views exposed filters component styles.
+//
+// One skin for both exposed-filter forms so the treatment can never drift:
+// the SDC-repointed form (`.views-exposed-filters .views-exposed-form`, used
+// by Events via setViewsComponentStyleTheme) and the Better Exposed Filters
+// form (`.views-exposed-form.bef-exposed-form`, used by the News and Programs
+// listings). SDC attaches a component's compiled CSS only when the component
+// renders, and the BEF listings do NOT render through this SDC — so the theme
+// `global-styles` library depends on this component's library, loading this
+// stylesheet site-wide. All values derive from this theme's Bootstrap tokens.
+
+@import "../../defaults"; // Global component defaults.
+
+.views-exposed-filters .views-exposed-form,
+.views-exposed-form.bef-exposed-form {
+  // ── Tokens (all derived from this theme's Bootstrap tokens) ──
+  --views-exposed-filters-gap: #{$spacer};
+  --views-exposed-filters-margin-block-end: #{$spacer * 2};
+  --views-exposed-filters-search-basis: #{$spacer * 16};
+  --views-exposed-filters-search-min-width: #{$spacer * 12};
+  --views-exposed-filters-select-basis: #{$spacer * 16.4375};
+  --views-exposed-filters-input-bg: var(--bs-white); // White field surface, distinct from the warm page bg.
+  --views-exposed-filters-input-border: var(--bs-border-color);
+  --views-exposed-filters-input-radius: var(--bs-border-radius-sm);
+  --views-exposed-filters-input-focus-color: var(--bs-primary);
+  --views-exposed-filters-input-focus-ring: #{rgba($primary, 0.15)};
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--views-exposed-filters-gap);
+  margin-bottom: var(--views-exposed-filters-margin-block-end);
+
+  > .form-item,
+  > .js-form-item {
+    margin: 0;
+  }
+
+  // The keyword filter is named after its own field, so the listings render it
+  // as `form-item-search` while the site search view renders `form-item-keywords`
+  // - match the free-text widget as well, so both grow and carry the icon.
+  > [class*="form-item-search"],
+  > .js-form-type-textfield {
+    flex: 1 0 var(--views-exposed-filters-search-basis);
+    min-width: var(--views-exposed-filters-search-min-width);
+  }
+
+  > [class*="form-item-search"] input[type="text"],
+  > .js-form-type-textfield input[type="text"] {
+    padding-left: #{$spacer * 2.25}; // room for the search icon
+    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2714%27 height=%2714%27 viewBox=%270 0 14 14%27 fill=%27none%27%3E%3Cpath d=%27M6.125 11.375a5.25 5.25 0 1 0 0-10.5 5.25 5.25 0 0 0 0 10.5ZM13.125 13.125 9.84 9.84%27 stroke=%27%23001D38%27 stroke-width=%271.3%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: #{$spacer} center;
+    background-size: #{$spacer * 0.875};
+  }
+
+  // Each listing names its filters after its own fields (Type is
+  // field_event_categories on events, field_news_categories on news), so match
+  // the widget, not the field name.
+  > .js-form-type-select {
+    flex: 0 0 var(--views-exposed-filters-select-basis);
+  }
+
+  @include media-breakpoint-down(md) {
+    > .form-item,
+    > .js-form-item,
+    > [class*="form-item-search"],
+    > .js-form-type-textfield,
+    > .js-form-type-select,
+    > .form-actions {
+      flex: 1 1 100%;
+    }
+  }
+
+  // The site search's keyword field keeps its button on its row down to sm.
+  &:has(> .js-form-item-keywords) {
+    @include media-breakpoint-between(sm, md) {
+      > .js-form-type-textfield {
+        flex: 1 1 0;
+      }
+
+      > .form-actions {
+        flex: 0 0 auto;
+      }
+    }
+  }
+
+  // A bef_links exposed filter renders as a pill toggle inside a bordered
+  // rounded container; the selected option is filled with the brand accent.
+  // Matched on the widget, so any listing exposing a filter as links matches.
+  .bef-links {
+    margin-inline-start: auto;
+
+    ul {
+      display: flex;
+      gap: 0;
+      margin: 0;
+      padding: #{$spacer * 0.25};
+      list-style: none;
+      border: var(--bs-border-width) solid var(--bs-border-color);
+      border-radius: var(--bs-border-radius-pill);
+    }
+
+    .bef-link {
+      display: inline-flex;
+      align-items: center;
+      height: #{$spacer * 2.5};
+      padding-inline: #{$spacer * 1.5};
+      color: var(--bs-body-color);
+      border-radius: var(--bs-border-radius-pill);
+      font-size: 1rem;
+      font-weight: $font-weight-semibold;
+      line-height: 1.35;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        color: var(--bs-body-color);
+      }
+    }
+
+    .bef-link--selected {
+      background-color: var(--bs-accent);
+
+      &:hover,
+      &:focus {
+        background-color: var(--bs-accent);
+      }
+    }
+  }
+
+  label {
+    margin-bottom: #{$spacer * 0.5};
+    color: var(--bs-tertiary-color);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .form-text,
+  .form-select,
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: #{$spacer * 0.75} #{$spacer};
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    color: $subtle-text;
+    border: var(--bs-border-width) solid var(--views-exposed-filters-input-border);
+    border-radius: var(--views-exposed-filters-input-radius);
+    background-color: var(--views-exposed-filters-input-bg);
+    font-size: #{$spacer * 0.875}; // 14px.
+    line-height: 1.5;
+
+    &::placeholder {
+      color: $subtle-text; // Same "text/dark-subtle-text" token as the input text.
+    }
+
+    &:focus {
+      border-color: var(--views-exposed-filters-input-focus-color);
+      outline: 0;
+      box-shadow: 0 0 0 #{$spacer * 0.2} var(--views-exposed-filters-input-focus-ring);
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    height: #{$spacer * 3.125};
+    gap: #{$spacer * 1.5};
+  }
+
+  // Apply Filter: navy, bold, uppercase text action with a visible underline
+  // on hover/focus (an AA-legible cue, not an opacity-only fade).
+  .form-submit {
+    min-height: #{$spacer * 2.5}; // A comfortable tap target around the text action.
+    padding: 0;
+    transition:
+      color 0.15s ease-in-out,
+      text-decoration-color 0.15s ease-in-out;
+    color: var(--bs-dark); // Navy Apply action (dark-text token), AA ~19:1 on the page bg.
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+    text-transform: uppercase; // Design renders Apply Filter uppercase.
+
+    &:hover,
+    &:focus {
+      color: var(--bs-dark);
+      background: transparent;
+      text-decoration: underline; // Visible AA hover/focus cue.
+    }
+  }
+
+  // Reset: secondary to Apply — the darker subtle token (#404456, AA ~9.6:1),
+  // NOT the design's failing light gray. Hover/focus lifts it to navy with the
+  // same underline cue as Apply.
+  [id*="edit-reset"],
+  input[name="reset"] {
+    transition:
+      color 0.15s ease-in-out,
+      text-decoration-color 0.15s ease-in-out;
+    color: $subtle-text; // dark-subtle-text #404456 — visually secondary, AA-passing.
+    text-decoration: none;
+    text-transform: uppercase; // Design renders Reset uppercase.
+
+    &:hover,
+    &:focus {
+      color: var(--bs-dark); // Navy on hover/focus (AA ~19:1).
+      text-decoration: underline; // Same visible cue as Apply.
+    }
+  }
+}
+
+// Facet lists in the search filter rail align with their headings.
+.facets-widget-checkbox > ul {
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+// The rail's Date Published form sits inside the rail, so it drops the form's own spacing.
+.block-views[class*="search-date-block"] .views-exposed-form {
+  margin-bottom: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+// The Date Published radios read like the facet checkbox lists above them.
+.block-views[class*="search-date-block"] {
+  .fieldgroup.card {
+    margin-bottom: 0;
+    border: 0;
+    background-color: transparent;
+  }
+
+  .fieldgroup.card > .card-header {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+  }
+
+  .fieldgroup.card > .card-body {
+    padding: 0;
+  }
+
+  .js-form-type-radio {
+    display: flex;
+    gap: 0.5em;
+    align-items: flex-start;
+    margin-bottom: $spacer * 0.125;
+  }
+
+  .js-form-type-radio label {
+    margin-bottom: 0;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+// SDC layout modifier: force the row into a stacked column.
+.views-exposed-filters--stacked .views-exposed-form {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+[dir="rtl"] .views-exposed-filters .views-exposed-form [class*="form-item-search"] input[type="text"],
+[dir="rtl"] .views-exposed-filters .views-exposed-form .js-form-type-textfield input[type="text"],
+[dir="rtl"] .views-exposed-form.bef-exposed-form [class*="form-item-search"] input[type="text"],
+[dir="rtl"] .views-exposed-form.bef-exposed-form .js-form-type-textfield input[type="text"] {
+  padding-right: #{$spacer * 2.25};
+  padding-left: 0;
+}

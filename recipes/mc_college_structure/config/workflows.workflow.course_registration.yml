@@ -1,0 +1,84 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - registration
+id: course_registration
+label: 'Course registration'
+type: registration
+type_settings:
+  states:
+    enrolled:
+      label: Enrolled
+      description: 'Student holds a seat in the course session.'
+      active: true
+      canceled: false
+      held: false
+      show_on_form: true
+      weight: 0
+    waitlisted:
+      label: Waitlisted
+      description: 'Student is waiting for a seat; does not count against capacity.'
+      active: false
+      canceled: false
+      held: true
+      show_on_form: true
+      weight: 1
+    completed:
+      label: Completed
+      description: 'Student finished the course; the grade counts toward GPA.'
+      active: true
+      canceled: false
+      held: false
+      show_on_form: true
+      weight: 2
+    dropped:
+      label: Dropped
+      description: 'Dropped before the drop deadline; no transcript entry.'
+      active: false
+      canceled: true
+      held: false
+      show_on_form: true
+      weight: 3
+    withdrawn:
+      label: Withdrawn
+      description: 'Withdrew after the drop deadline; transcript shows W.'
+      active: false
+      canceled: true
+      held: false
+      show_on_form: true
+      weight: 4
+  transitions:
+    enroll:
+      label: Enroll
+      to: enrolled
+      weight: 0
+      from:
+        - waitlisted
+    waitlist:
+      label: 'Move to waitlist'
+      to: waitlisted
+      weight: 1
+      from:
+        - enrolled
+    complete:
+      label: Complete
+      to: completed
+      weight: 2
+      from:
+        - enrolled
+    drop:
+      label: Drop
+      to: dropped
+      weight: 3
+      from:
+        - enrolled
+        - waitlisted
+    withdraw:
+      label: Withdraw
+      to: withdrawn
+      weight: 4
+      from:
+        - enrolled
+  default_registration_state: enrolled
+  complete_registration_state: completed

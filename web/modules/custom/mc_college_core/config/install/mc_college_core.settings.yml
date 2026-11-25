@@ -1,0 +1,6 @@
+probation_gpa: 2.0
+deans_list_gpa: 3.5
+deans_list_min_credits: 6
+non_matriculated_credit_cap: 11
+matriculation_credit_threshold: 12
+enforce_matriculation: true

@@ -1,0 +1,353 @@
+{% stories FoundationColors with {
+  title: 'Foundation/Colors',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Named color tokens for MC College, sourced from scss/_bootstrap-variables.scss.',
+      },
+    },
+  },
+} %}
+
+{% story Colors with {
+  name: 'Colors',
+} %}
+
+<style>
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .token-table th {
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: var(--bs-secondary-color);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .token-table td {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--bs-border-color);
+    vertical-align: middle;
+    font-size: 0.875rem;
+  }
+  .token-table td:first-child {
+    width: 220px;
+  }
+  .token-table td:nth-child(2) {
+    width: 110px;
+  }
+  .token-swatch {
+    display: inline-block;
+    width: 70px;
+    height: 32px;
+    border-radius: var(--bs-border-radius-sm);
+  }
+  .token-swatch.swatch-border {
+    border: 1px solid var(--bs-border-color);
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Colors</h1>
+    </div>
+  </div>
+
+  {# Text tokens #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Text</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>text/</th>
+            <th>sample</th>
+            <th>description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>dark-text</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-body-color);"></span></td>
+            <td>Used for primary texts</td>
+          </tr>
+          <tr>
+            <td>dark-subtle-text</td>
+            <td><span class="token-swatch" style="background-color: #404456;"></span></td>
+            <td>Complements primary text, used for descriptions, used when we have a lot of text to read</td>
+          </tr>
+          <tr>
+            <td>light-text</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-secondary-text-emphasis);"></span></td>
+            <td>Complements primary text, used for descriptions, used when we have a lot of text to read; used for taxonomy text</td>
+          </tr>
+          <tr>
+            <td>light-subtle-text</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-accent-text-emphasis);"></span></td>
+            <td>Complements primary text, used for descriptions, used when we have a lot of text to read</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Background tokens #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Background</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>bg/</th>
+            <th>sample</th>
+            <th>description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>white-bg</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-body-bg);"></span></td>
+            <td>Used on all backgrounds</td>
+          </tr>
+          <tr>
+            <td>subtle-bg</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-secondary-bg-subtle);"></span></td>
+            <td>Used to highlight blocks</td>
+          </tr>
+          <tr>
+            <td>accent-bg</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-accent);"></span></td>
+            <td>Used for accent elements, for buttons, section items</td>
+          </tr>
+          <tr>
+            <td>dark-bg</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-dark);"></span></td>
+            <td>Used for accent blocks</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Border tokens #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Border</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>border/</th>
+            <th>sample</th>
+            <th>description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>subtle-border</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-border-color);"></span></td>
+            <td>Used for borders on the light bg</td>
+          </tr>
+          <tr>
+            <td>dark-border</td>
+            <td><span class="token-swatch" style="background-color: #404456;"></span></td>
+            <td>Used for borders on the dark backgrounds</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Subtle tokens #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Subtle</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>subtle/</th>
+            <th>sample</th>
+            <th>description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>primary-subtle</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-primary-bg-subtle);"></span></td>
+            <td>Button circles</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Alert colors — success #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Alert Colors / success</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>success/</th>
+            <th>sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>success</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-success);"></span></td>
+          </tr>
+          <tr>
+            <td>emphasis</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-success-text-emphasis);"></span></td>
+          </tr>
+          <tr>
+            <td>subtle</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-success-bg-subtle);"></span></td>
+          </tr>
+          <tr>
+            <td>border</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-success-border-subtle);"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Alert colors — error #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Alert Colors / error</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>error/</th>
+            <th>sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>error</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-danger);"></span></td>
+          </tr>
+          <tr>
+            <td>emphasis</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-danger-text-emphasis);"></span></td>
+          </tr>
+          <tr>
+            <td>subtle</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-danger-bg-subtle);"></span></td>
+          </tr>
+          <tr>
+            <td>border</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-danger-border-subtle);"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Alert colors — warning #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Alert Colors / warning</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>warning/</th>
+            <th>sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>warning</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-warning);"></span></td>
+          </tr>
+          <tr>
+            <td>emphasis</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-warning-text-emphasis);"></span></td>
+          </tr>
+          <tr>
+            <td>subtle</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-warning-bg-subtle);"></span></td>
+          </tr>
+          <tr>
+            <td>border</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-warning-border-subtle);"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Alert colors — info #}
+  <div class="row mt-5 pt-5">
+    <div class="col pt-5 border-top border-light-subtle">
+      <h2>Alert Colors / info</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>info/</th>
+            <th>sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>info</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-info);"></span></td>
+          </tr>
+          <tr>
+            <td>emphasis</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-info-text-emphasis);"></span></td>
+          </tr>
+          <tr>
+            <td>subtle</td>
+            <td><span class="token-swatch" style="background-color: var(--bs-info-bg-subtle);"></span></td>
+          </tr>
+          <tr>
+            <td>border</td>
+            <td><span class="token-swatch swatch-border" style="background-color: var(--bs-info-border-subtle);"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endstory %}
+
+{% endstories %}

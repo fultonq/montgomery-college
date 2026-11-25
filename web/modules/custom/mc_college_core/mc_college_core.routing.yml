@@ -1,0 +1,116 @@
+mc_college_core.academic_record:
+  path: '/user/{user}/academic-record'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\AcademicRecordController::record'
+    _title_callback: '\Drupal\mc_college_core\Controller\AcademicRecordController::recordTitle'
+  requirements:
+    _custom_access: '\Drupal\mc_college_core\Controller\AcademicRecordController::access'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+mc_college_core.transcript:
+  path: '/user/{user}/transcript'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\AcademicRecordController::transcript'
+    _title_callback: '\Drupal\mc_college_core\Controller\AcademicRecordController::transcriptTitle'
+  requirements:
+    _custom_access: '\Drupal\mc_college_core\Controller\AcademicRecordController::access'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+mc_college_core.performance_analytics:
+  path: '/admin/reports/college-performance'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\PerformanceReportController::analytics'
+    _title: 'Course and department performance'
+  requirements:
+    _permission: 'view college performance analytics'
+
+mc_college_core.student_performance:
+  path: '/admin/reports/college-performance/students'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\PerformanceReportController::students'
+    _title: 'Student performance'
+  requirements:
+    _permission: 'view student academic records'
+
+mc_college_core.performance_export:
+  path: '/admin/reports/college-performance/export/{report}'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\PerformanceReportController::export'
+  requirements:
+    _permission: 'view college performance analytics+view student academic records'
+    report: 'department|course|students'
+
+mc_college_core.settings:
+  path: '/admin/config/people/mc-college'
+  defaults:
+    _form: '\Drupal\mc_college_core\Form\SettingsForm'
+    _title: 'MC College academic policy'
+  requirements:
+    _permission: 'administer mc college settings'
+
+mc_college_core.schedule:
+  path: '/user/{user}/schedule'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\EnrollmentController::schedule'
+    _title: 'My schedule'
+  requirements:
+    _custom_access: '\Drupal\mc_college_core\Controller\EnrollmentController::scheduleAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+mc_college_core.teaching:
+  path: '/user/{user}/teaching'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\EnrollmentController::teaching'
+    _title: 'Teaching'
+  requirements:
+    _custom_access: '\Drupal\mc_college_core\Controller\EnrollmentController::teachingAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+mc_college_core.course_schedule:
+  path: '/course-schedule'
+  defaults:
+    _controller: '\Drupal\mc_college_core\Controller\EnrollmentController::courseSchedule'
+    _title: 'Course schedule'
+  requirements:
+    _permission: 'access content'
+
+mc_college_core.registration_action:
+  path: '/registration/{registration}/{action}'
+  defaults:
+    _form: '\Drupal\mc_college_core\Form\RegistrationActionForm'
+  requirements:
+    _custom_access: '\Drupal\mc_college_core\Form\RegistrationActionForm::access'
+    action: 'drop|withdraw'
+  options:
+    parameters:
+      registration:
+        type: entity:registration
+
+mc_college_core.grade_roster:
+  path: '/node/{node}/grades'
+  defaults:
+    _form: '\Drupal\mc_college_core\Form\GradeRosterForm'
+    _title_callback: '\Drupal\mc_college_core\Form\GradeRosterForm::title'
+  requirements:
+    _custom_access: '\Drupal\mc_college_core\Form\GradeRosterForm::access'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node

@@ -1,0 +1,43 @@
+icon_map:
+  linkedin:
+    pack: 'mc_college_social'
+    icon: 'linkedin'
+  facebook_share:
+    pack: 'mc_college_social'
+    icon: 'facebook'
+  x:
+    pack: 'mc_college_social'
+    icon: 'x'
+  whatsapp:
+    pack: 'mc_college_social'
+    icon: 'whatsapp'
+  copy:
+    pack: 'mc_college_social'
+    icon: 'clipboard'
+  email:
+    pack: 'mc_college_social'
+    icon: 'email'
+  telegram:
+    pack: 'mc_college_social'
+    icon: 'telegram'
+  reddit:
+    pack: 'mc_college_social'
+    icon: 'reddit'
+  pinterest:
+    pack: 'mc_college_social'
+    icon: 'pinterest'
+  threads:
+    pack: 'mc_college_social'
+    icon: 'threads'
+  bluesky:
+    pack: 'mc_college_social'
+    icon: 'bluesky'
+  tumblr:
+    pack: 'mc_college_social'
+    icon: 'tumblr'
+  mastodon:
+    pack: 'mc_college_social'
+    icon: 'mastodon'
+native_share_icon:
+  pack: 'mc_college_social'
+  icon: 'share-fill'

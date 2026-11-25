@@ -1,0 +1,5 @@
+mc_college_billing.account_tab:
+  route_name: mc_college_billing.account
+  base_route: entity.user.canonical
+  title: 'Tuition and fees'
+  weight: 23

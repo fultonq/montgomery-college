@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Faculty Profile'
+type: faculty_profile
+description: 'Faculty member biography and contact information.'
+help: 'Public directory profile for a faculty or staff member.'
+new_revision: true
+preview_mode: 1
+display_submitted: false

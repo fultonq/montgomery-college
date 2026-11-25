@@ -1,0 +1,11 @@
+mc_college_billing.balances:
+  title: 'Student balances'
+  description: 'Tuition bills, payments, and outstanding balances by semester.'
+  route_name: mc_college_billing.balances
+  parent: commerce.admin_commerce
+  weight: 5
+mc_college_billing.settings:
+  title: 'Tuition and fees'
+  description: 'Per-credit tuition by residency, fees, and financial holds.'
+  route_name: mc_college_billing.settings
+  parent: commerce.configuration

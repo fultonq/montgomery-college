@@ -1,0 +1,139 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for MC College Billing.
+ */
+
+declare(strict_types=1);
+
+use Drupal\commerce_order\Entity\OrderItemType;
+use Drupal\commerce_order\Entity\OrderType;
+use Drupal\commerce_payment\Entity\PaymentGateway;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ *
+ * Creates the currency, the college store, the "term bill" order and order
+ * item types, the Bursar's Office manual payment gateway, and a Bursar role.
+ */
+function mc_college_billing_install(): void {
+  $etm = \Drupal::entityTypeManager();
+
+  // Currency.
+  if (!$etm->getStorage('commerce_currency')->load('USD')) {
+    \Drupal::service('commerce_price.currency_importer')->import('USD');
+  }
+
+  // Store (fictional address; edit at /admin/commerce/config/stores).
+  $stores = $etm->getStorage('commerce_store');
+  if (!$stores->loadDefault()) {
+    $store = $stores->create([
+      'type' => 'online',
+      'uid' => 1,
+      'name' => 'Montgomery Community College',
+      'mail' => \Drupal::config('system.site')->get('mail') ?: 'bursar@example.edu',
+      'default_currency' => 'USD',
+      'timezone' => \Drupal::config('system.date')->get('timezone.default') ?: 'America/New_York',
+      'address' => [
+        'country_code' => 'US',
+        'address_line1' => '100 College Drive',
+        'locality' => 'Anytown',
+        'administrative_area' => 'MD',
+        'postal_code' => '20850',
+      ],
+      'billing_countries' => ['US'],
+      'is_default' => TRUE,
+    ]);
+    // 'is_default' => TRUE makes this the default store.
+    $store->save();
+  }
+
+  // Order type: one bill per student per semester. No receipt emails; bills
+  // are placed (numbered) as soon as they are created.
+  if (!OrderType::load('term_bill')) {
+    OrderType::create([
+      'id' => 'term_bill',
+      'label' => 'Term bill',
+      'workflow' => 'order_default',
+      'refresh_mode' => 'customer',
+      'refresh_frequency' => 300,
+      'sendReceipt' => FALSE,
+      'receiptBcc' => '',
+    ])->save();
+  }
+  if (!OrderItemType::load('mc_charge')) {
+    OrderItemType::create([
+      'id' => 'mc_charge',
+      'label' => 'Tuition or fee',
+      'orderType' => 'term_bill',
+      'purchasableEntityType' => NULL,
+    ])->save();
+  }
+  if (!FieldStorageConfig::loadByName('commerce_order', 'field_semester')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_semester',
+      'entity_type' => 'commerce_order',
+      'type' => 'entity_reference',
+      'settings' => ['target_type' => 'node'],
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('commerce_order', 'term_bill', 'field_semester')) {
+    FieldConfig::create([
+      'field_name' => 'field_semester',
+      'entity_type' => 'commerce_order',
+      'bundle' => 'term_bill',
+      'label' => 'Semester',
+      'required' => TRUE,
+      'settings' => [
+        'handler' => 'default:node',
+        'handler_settings' => ['target_bundles' => ['semester' => 'semester']],
+      ],
+    ])->save();
+    \Drupal::service('entity_display.repository')->getViewDisplay('commerce_order', 'term_bill')
+      ->setComponent('field_semester', ['type' => 'entity_reference_label', 'label' => 'inline', 'weight' => -5])
+      ->save();
+  }
+
+  // Manual payment gateway for payments taken at the Bursar's Office.
+  if (!PaymentGateway::load('bursar')) {
+    PaymentGateway::create([
+      'id' => 'bursar',
+      'label' => "Bursar's Office",
+      'plugin' => 'manual',
+      'configuration' => [
+        'display_label' => "Bursar's Office",
+        'mode' => 'n/a',
+        'payment_method_types' => ['credit_card'],
+        'collect_billing_information' => FALSE,
+        'instructions' => [
+          'value' => "Pay at the Bursar's Office.",
+          'format' => 'plain_text',
+        ],
+      ],
+      'conditions' => [],
+    ])->save();
+  }
+
+  // Bursar role: records payments and reviews balances.
+  if (!Role::load('bursar')) {
+    Role::create(['id' => 'bursar', 'label' => 'Bursar', 'weight' => 13])->save();
+  }
+  user_role_grant_permissions('bursar', [
+    'access content',
+    'access user profiles',
+    'access commerce administration pages',
+    'access commerce_order overview',
+    'view commerce_order',
+    'administer commerce_payment',
+    'view student accounts',
+  ]);
+  foreach (['student' => ['view own student account'], 'registrar' => ['view student accounts']] as $role => $permissions) {
+    if (Role::load($role)) {
+      user_role_grant_permissions($role, $permissions);
+    }
+  }
+}

@@ -1,0 +1,109 @@
+
+@import "../../defaults";   // Global component defaults.
+
+// Override default bootstrap breadcrumb variables.
+$breadcrumb-font-size: #{$spacer * 0.75};
+$breadcrumb-padding-x: 0.0625rem;
+
+@import "../../../node_modules/bootstrap/scss/breadcrumb";
+
+// Change default bootstrap breadcrumb style.
+
+// Change the color for text in the breadcrumb.
+//
+// Linked items render through atoms/link as a plain <a> with no color
+// class, so without the nested selector below they'd fall back to
+// Bootstrap's default link color (blue) instead of inheriting this — an
+// element's own explicit color always wins over inheritance from its
+// parent, so `.breadcrumb-item { color: … }` alone only reaches the
+// non-linked (active/current) item, which has no <a> to override it.
+.breadcrumb {
+  .breadcrumb-item {
+    color: $subtle-text;
+    font-weight: $font-weight-semibold;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  color: $subtle-text;
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark) {
+    .breadcrumb {
+      .breadcrumb-item {
+        color: var(--bs-light);
+      }
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+      color: var(--bs-light);
+    }
+  }
+}
+
+// Change the breadcrumb divider to use bootstrap-icons.
+.breadcrumb-item + .breadcrumb-item::before {
+  font-family: 'bootstrap-icons';
+  font-size: 1.1rem;
+  font-weight: 500;
+  content: quote("\F285");
+}
+[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+  content: quote("\F285");
+}
+
+// Close the trail with a separator after the last item.
+//
+// The design draws the breadcrumb as `Home > Section >`, with a divider
+// after the final entry leading the eye into the page title below it.
+// Bootstrap only draws dividers BETWEEN items
+// (`.breadcrumb-item + .breadcrumb-item::before`), so the last one needs
+// its own. `:not(.active)` keeps it off the current-page entry: when Drupal
+// does include the current page the trail has arrived, and a separator
+// after it would point at nothing.
+.breadcrumb-item:last-child:not(.active)::after {
+  color: $subtle-text;
+  font-family: 'bootstrap-icons';
+  font-size: 1.1rem;
+  font-weight: 500;
+  content: quote("\F285");
+  padding-inline-start: $breadcrumb-item-padding-x;
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark) {
+    .breadcrumb-item:last-child:not(.active)::after {
+      color: var(--bs-light);
+    }
+  }
+}
+
+// Centre the dividers against the labels.
+//
+// The divider glyphs are 1.1rem so they read at the same weight as the
+// labels, but the labels are 0.75rem. Left on the shared text baseline the
+// two never line up — the glyph's taller line box sets the row height and
+// the label ends up sitting low in it. Making the item a flex row centres
+// the ::before divider, the label and the ::after that closes the trail
+// against each other, and `line-height: 1` on the glyphs stops their line
+// box inflating the row.
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item + .breadcrumb-item::before,
+.breadcrumb-item:last-child:not(.active)::after {
+  line-height: 1;
+}

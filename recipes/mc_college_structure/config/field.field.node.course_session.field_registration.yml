@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_registration
+    - node.type.course_session
+    - registration.type.course_session
+  module:
+    - registration
+id: node.course_session.field_registration
+field_name: field_registration
+entity_type: node
+bundle: course_session
+label: 'Registration'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    registration_type: course_session
+default_value_callback: ''
+settings: {  }
+field_type: registration

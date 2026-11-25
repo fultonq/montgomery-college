@@ -1,0 +1,58 @@
+/**
+ * @file
+ * Montgomery Community College brand layer on top of the Educare design system.
+ */
+:root {
+  --mc-purple: #51237f;
+  --mc-purple-dark: #3e1a62;
+  --mc-blue: #005a9c;
+  --mc-success: #1e7d34;
+  --bs-primary: var(--mc-purple);
+  --bs-primary-rgb: 81, 35, 127;
+  --bs-link-color: var(--mc-blue);
+  --bs-link-color-rgb: 0, 90, 156;
+  --bs-link-hover-color: var(--mc-purple);
+}
+.bg-primary { background-color: var(--mc-purple) !important; }
+.text-primary { color: var(--mc-purple) !important; }
+.btn-primary {
+  --bs-btn-bg: var(--mc-purple);
+  --bs-btn-border-color: var(--mc-purple);
+  --bs-btn-hover-bg: var(--mc-purple-dark);
+  --bs-btn-hover-border-color: var(--mc-purple-dark);
+  --bs-btn-active-bg: var(--mc-purple-dark);
+}
+
+/* College content types (classes added by mc_college_core). */
+.mc-node .field__label { font-weight: 700; color: var(--mc-purple); }
+.mc-node--course .field--name-field-course-code .field__item {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 0.25rem;
+  background: var(--mc-purple);
+  color: #fff;
+  font-weight: 700;
+}
+.mc-node--course-session .field,
+.mc-node--semester .field {
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) 1fr;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+  border-block-end: 1px solid #e3e6eb;
+}
+.mc-node--scholarship .field--name-field-award-amount .field__item {
+  color: var(--mc-success);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.mc-registration-status {
+  display: inline-block;
+  margin-block-end: 1rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.mc-registration-status--open { background: #e3f4e7; color: var(--mc-success); }
+.mc-registration-status--upcoming { background: #fff6db; color: #7a5b00; }
+.mc-registration-status--closed { background: #eceef1; color: #5b6472; }
